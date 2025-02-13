@@ -8,7 +8,7 @@ public class HeroArenaFramework : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "AIModule", "UMG", "NavigationSystem", "AnimGraphRuntime"  });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "AIModule", "UMG", "NavigationSystem", "AnimGraphRuntime", "EnhancedInput"  });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

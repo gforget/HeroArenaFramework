@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "ActorComponents/TeamManager.h"
 #include "GameFramework/Character.h"
+#include "InputActionValue.h"
 #include "BaseShooterCharacter.generated.h"
 
 class ABaseShooterSpectatorPawn;
@@ -96,6 +97,14 @@ public:
 	virtual void Reload();
 	virtual void PullTrigger();
 	virtual void ReleaseTrigger();
+
+	/** The default input mapping context to add on BeginPlay */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputMappingContext* DefaultMappingContext;
+
+	/** The input action for movement (configured as a 2D axis) */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* MoveAction;
 	
 protected:
 	
@@ -175,8 +184,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 100.0f;
 	
-	void MoveForward(float AxisValue);
-	void MoveRight(float AxisValue);
+	void Move(const FInputActionValue& Value);
 	
 	void LookUpRate(float AxisValue);
 	void LookRightRate(float AxisValue);

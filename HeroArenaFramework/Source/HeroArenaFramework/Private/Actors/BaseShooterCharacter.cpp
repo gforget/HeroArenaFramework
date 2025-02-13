@@ -2,7 +2,8 @@
 
 
 #include "Actors/BaseShooterCharacter.h"
-
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
 #include "Actors/BaseGun.h"
 #include "Actors/BaseShooterSpectatorPawn.h"
 #include "Actors/RotationViewPointRef.h"
@@ -78,10 +79,10 @@ void ABaseShooterCharacter::BeginPlay()
 	Health = MaxHealth;
 
 	Gun = GetWorld()->SpawnActor<ABaseGun>(GunClass);
-	GetMesh()->HideBoneByName(TEXT("weapon_r"), PBO_None);
-	
-	Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
-	Gun->SetOwner(this);
+	// GetMesh()->HideBoneByName(TEXT("weapon_r"), PBO_None);
+	//
+	// Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+	// Gun->SetOwner(this);
 
 	VSShooterCharacter = GetWorld()->SpawnActor<AVisualStimuli_ShooterCharacter>(
 		VisualStimuli_ShooterCharacterClass,
@@ -106,6 +107,19 @@ void ABaseShooterCharacter::BeginPlay()
 	// Set initial collision sphere size
 	HeadCollision->SetSphereRadius(HeadshotRadius-5.0f);
 	UpdateHeadCollision();
+
+	// Get the Player Controller and then the Local Player subsystem for Enhanced Input.
+	if (APlayerController* PC = Cast<APlayerController>(Controller))
+	{
+		if (ULocalPlayer* LocalPlayer = PC->GetLocalPlayer())
+		{
+			if (UEnhancedInputLocalPlayerSubsystem* Subsystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+			{
+				// Add the mapping context, at priority 0.
+				Subsystem->AddMappingContext(DefaultMappingContext, 0);
+			}
+		}
+	}
 }
 
 void ABaseShooterCharacter::Tick(float DeltaTime)
@@ -134,11 +148,17 @@ void ABaseShooterCharacter::Tick(float DeltaTime)
 void ABaseShooterCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ABaseShooterCharacter::MoveForward);
+	
+	// Make sure to use UEnhancedInputComponent.
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		// Bind the MoveAction to our Move() callback when triggered.
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABaseShooterCharacter::Move);
+	}
+	
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis(TEXT("LookUpRate"), this, &ABaseShooterCharacter::LookUpRate);
 	
-	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &ABaseShooterCharacter::MoveRight);
 	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis(TEXT("LookRightRate"), this, &ABaseShooterCharacter::LookRightRate);
 	
@@ -205,14 +225,11 @@ float ABaseShooterCharacter::TakeDamage(float DamageAmount, FDamageEvent const& 
 	return DamageToApply;
 }
 
-void ABaseShooterCharacter::MoveForward(float AxisValue)
+void ABaseShooterCharacter::Move(const FInputActionValue& Value)
 {
-	AddMovementInput(GetActorForwardVector()*AxisValue);
-}
-
-void ABaseShooterCharacter::MoveRight(float AxisValue)
-{
-	AddMovementInput(GetActorRightVector()*AxisValue);
+	FVector2D MovementVector = Value.Get<FVector2D>();
+	AddMovementInput(GetActorForwardVector(), MovementVector.Y);
+	AddMovementInput(GetActorRightVector(), MovementVector.X);
 }
 
 void ABaseShooterCharacter::LookUpRate(float AxisValue)
