@@ -115,6 +115,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	class UInputAction* JumpAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* ShootAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* ReloadAction;
 	
 protected:
 	
@@ -194,10 +200,12 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 100.0f;
 	
-	void Move(const FInputActionValue& Value);
-	void Look(const FInputActionValue& Value);
-	void LookRate(const FInputActionValue& Value);
-	void Jump(const FInputActionValue& Value);
+	void MoveInput(const FInputActionValue& Value);
+	void LookInput(const FInputActionValue& Value);
+	void LookRateInput(const FInputActionValue& Value);
+	void JumpInput(const FInputActionValue& Value);
+	void ShootInput(const FInputActionValue& Value);
+	void ReloadInput(const FInputActionValue& Value);
 	
 	UPROPERTY()
 	UPlayMontageCallbackProxy* ProxyReloadPlayMontage;

@@ -153,15 +153,13 @@ void ABaseShooterCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		// Bind the MoveAction to our Move() callback when triggered.
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABaseShooterCharacter::Move);
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABaseShooterCharacter::Look);
-		EnhancedInputComponent->BindAction(LookRateAction, ETriggerEvent::Triggered, this, &ABaseShooterCharacter::LookRate);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ABaseShooterCharacter::Jump);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABaseShooterCharacter::MoveInput);
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABaseShooterCharacter::LookInput);
+		EnhancedInputComponent->BindAction(LookRateAction, ETriggerEvent::Triggered, this, &ABaseShooterCharacter::LookRateInput);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ABaseShooterCharacter::JumpInput);
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &ABaseShooterCharacter::ShootInput);
+		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &ABaseShooterCharacter::ReloadInput);
 	}
-	
-	PlayerInputComponent->BindAction(TEXT("Shoot"), IE_Pressed, this, &ABaseShooterCharacter::PullTrigger);
-	PlayerInputComponent->BindAction(TEXT("Shoot"), IE_Released, this, &ABaseShooterCharacter::ReleaseTrigger);
-	PlayerInputComponent->BindAction(TEXT("Reload"), IE_Pressed, this, &ABaseShooterCharacter::Reload);
 }
 
 float ABaseShooterCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
@@ -221,34 +219,52 @@ float ABaseShooterCharacter::TakeDamage(float DamageAmount, FDamageEvent const& 
 	return DamageToApply;
 }
 
-void ABaseShooterCharacter::Move(const FInputActionValue& Value)
+void ABaseShooterCharacter::MoveInput(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
 	AddMovementInput(GetActorForwardVector(), MovementVector.Y);
 	AddMovementInput(GetActorRightVector(), MovementVector.X);
 }
 
-void ABaseShooterCharacter::Look(const FInputActionValue& Value)
+void ABaseShooterCharacter::LookInput(const FInputActionValue& Value)
 {
 	FVector2D RotationVector = Value.Get<FVector2D>();
 	AddControllerYawInput(RotationVector.X);
 	AddControllerPitchInput(RotationVector.Y);
 }
 
-void ABaseShooterCharacter::LookRate(const FInputActionValue& Value)
+void ABaseShooterCharacter::LookRateInput(const FInputActionValue& Value)
 {
 	FVector2D RotationVector = Value.Get<FVector2D>();
 	AddControllerYawInput(RotationVector.X * RotationRate * GetWorld()->GetDeltaSeconds());
 	AddControllerPitchInput(RotationVector.Y * RotationRate * GetWorld()->GetDeltaSeconds());
 }
 
-void ABaseShooterCharacter::Jump(const FInputActionValue& Value)
+void ABaseShooterCharacter::JumpInput(const FInputActionValue& Value)
 {
 	ACharacter::Jump();
 }
 
+void ABaseShooterCharacter::ShootInput(const FInputActionValue& Value)
+{
+	if (Value.Get<bool>())
+	{
+		PullTrigger();
+	}
+	else
+	{
+		ReleaseTrigger();
+	}
+}
+
+void ABaseShooterCharacter::ReloadInput(const FInputActionValue& Value)
+{
+	Reload();
+}
+
 void ABaseShooterCharacter::PullTrigger()
 {
+	
 }
 
 void ABaseShooterCharacter::ReleaseTrigger()
