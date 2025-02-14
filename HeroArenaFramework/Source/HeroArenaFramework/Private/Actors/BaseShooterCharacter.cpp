@@ -154,15 +154,11 @@ void ABaseShooterCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 	{
 		// Bind the MoveAction to our Move() callback when triggered.
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABaseShooterCharacter::Move);
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABaseShooterCharacter::Look);
+		EnhancedInputComponent->BindAction(LookRateAction, ETriggerEvent::Triggered, this, &ABaseShooterCharacter::LookRate);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ABaseShooterCharacter::Jump);
 	}
 	
-	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
-	PlayerInputComponent->BindAxis(TEXT("LookUpRate"), this, &ABaseShooterCharacter::LookUpRate);
-	
-	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis(TEXT("LookRightRate"), this, &ABaseShooterCharacter::LookRightRate);
-	
-	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ACharacter::Jump); // already define in character class
 	PlayerInputComponent->BindAction(TEXT("Shoot"), IE_Pressed, this, &ABaseShooterCharacter::PullTrigger);
 	PlayerInputComponent->BindAction(TEXT("Shoot"), IE_Released, this, &ABaseShooterCharacter::ReleaseTrigger);
 	PlayerInputComponent->BindAction(TEXT("Reload"), IE_Pressed, this, &ABaseShooterCharacter::Reload);
@@ -232,14 +228,23 @@ void ABaseShooterCharacter::Move(const FInputActionValue& Value)
 	AddMovementInput(GetActorRightVector(), MovementVector.X);
 }
 
-void ABaseShooterCharacter::LookUpRate(float AxisValue)
+void ABaseShooterCharacter::Look(const FInputActionValue& Value)
 {
-	AddControllerPitchInput(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
+	FVector2D RotationVector = Value.Get<FVector2D>();
+	AddControllerYawInput(RotationVector.X);
+	AddControllerPitchInput(RotationVector.Y);
 }
 
-void ABaseShooterCharacter::LookRightRate(float AxisValue)
+void ABaseShooterCharacter::LookRate(const FInputActionValue& Value)
 {
-	AddControllerYawInput(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
+	FVector2D RotationVector = Value.Get<FVector2D>();
+	AddControllerYawInput(RotationVector.X * RotationRate * GetWorld()->GetDeltaSeconds());
+	AddControllerPitchInput(RotationVector.Y * RotationRate * GetWorld()->GetDeltaSeconds());
+}
+
+void ABaseShooterCharacter::Jump(const FInputActionValue& Value)
+{
+	ACharacter::Jump();
 }
 
 void ABaseShooterCharacter::PullTrigger()

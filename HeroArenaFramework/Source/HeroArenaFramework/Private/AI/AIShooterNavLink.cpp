@@ -50,7 +50,7 @@ void AAIShooterNavLink::OnNavLinkReach(AActor* MovingActor, const FVector& Desti
 		ShooterCharacter->GetCharacterMovement()->Velocity = DeltaToDestination * 500.0f;
 		
 		// Trigger jump
-		ShooterCharacter->Jump();
+		ShooterCharacter->ACharacter::Jump();
 	}
 }
 

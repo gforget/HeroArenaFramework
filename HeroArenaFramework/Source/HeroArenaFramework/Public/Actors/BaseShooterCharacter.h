@@ -105,6 +105,16 @@ public:
 	/** The input action for movement (configured as a 2D axis) */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	class UInputAction* MoveAction;
+
+	/** The input action for movement (configured as a 2D axis) */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* LookAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* LookRateAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* JumpAction;
 	
 protected:
 	
@@ -185,10 +195,10 @@ protected:
 	float RotationRate = 100.0f;
 	
 	void Move(const FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
+	void LookRate(const FInputActionValue& Value);
+	void Jump(const FInputActionValue& Value);
 	
-	void LookUpRate(float AxisValue);
-	void LookRightRate(float AxisValue);
-
 	UPROPERTY()
 	UPlayMontageCallbackProxy* ProxyReloadPlayMontage;
 	
