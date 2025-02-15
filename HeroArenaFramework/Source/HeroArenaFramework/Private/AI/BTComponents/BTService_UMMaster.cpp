@@ -8,7 +8,7 @@
 #include "NavigationSystem.h"
 #include "Actors/BaseAmmoPack.h"
 #include "Actors/BaseHealthPack.h"
-#include "Actors/BaseShooterCharacter.h"
+#include "Actors/BaseHeroCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -39,7 +39,7 @@ void UBTService_UMMaster::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 TEnumAsByte<EAIStateEnum> UBTService_UMMaster::ChooseState()
 {
 
-	if (ABaseShooterCharacter* ShooterCharacter = Cast<ABaseShooterCharacter>(OwnerCompPtr->GetAIOwner()->GetPawn()))
+	if (ABaseHeroCharacter* ShooterCharacter = Cast<ABaseHeroCharacter>(OwnerCompPtr->GetAIOwner()->GetPawn()))
 	{
 		if (ShooterCharacter->GetCharacterMovement()->IsFalling())
 		{

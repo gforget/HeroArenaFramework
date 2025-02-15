@@ -2,7 +2,7 @@
 #include "Actors/SinglePlayer/SP_Gun.h"
 
 #include "Actors/RotationViewPointRef.h"
-#include "Actors/SinglePlayer/SP_ShooterCharacter.h"
+#include "Actors/SinglePlayer/SP_HeroCharacter.h"
 #include "Stimuli/SoundStimuli/SoundStimuli_BulletImpactSound.h"
 #include "Stimuli/SoundStimuli/SoundStimuli_ShootingSound.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -25,7 +25,7 @@ void ASP_Gun::BeginPlay()
 void ASP_Gun::Fire()
 {
 	Super::Fire();
-	ASP_ShooterCharacter* CharacterOwner = Cast<ASP_ShooterCharacter>(GetOwner());
+	ASP_HeroCharacter* CharacterOwner = Cast<ASP_HeroCharacter>(GetOwner());
 	if (CharacterOwner == nullptr)
 	{
 		return;	
@@ -83,7 +83,7 @@ void ASP_Gun::Fire()
 bool ASP_Gun::GunTrace(FHitResult& Hit, FVector& ShotDirection)
 {
 	const AController* OwnerController = GetOwnerController();
-	ASP_ShooterCharacter* CharacterOwner = Cast<ASP_ShooterCharacter>(GetOwner());
+	ASP_HeroCharacter* CharacterOwner = Cast<ASP_HeroCharacter>(GetOwner());
 	
 	if (OwnerController == nullptr || CharacterOwner == nullptr) return false;
 	

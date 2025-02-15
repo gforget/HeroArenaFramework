@@ -2,11 +2,11 @@
 
 
 #include "GameMode/Multiplayer/ShooterGameMode/MP_TeamDeathMatchGameState.h"
-#include "Actors/Multiplayer/MP_ShooterCharacter.h"
-#include "Controllers/Multiplayer/MP_ShooterPlayerController.h"
-#include "GameMode/Multiplayer/ShooterGameMode/MP_ShooterGameMode.h"
+#include "Actors/Multiplayer/MP_HeroCharacter.h"
+#include "Controllers/Multiplayer/MP_HeroPlayerController.h"
+#include "GameMode/Multiplayer/ShooterGameMode/MP_BaseGameMode.h"
 
-void AMP_TeamDeathMatchGameState::AddShooterCharacterCount(AMP_ShooterCharacter* ShooterCharacterToRegister)
+void AMP_TeamDeathMatchGameState::AddShooterCharacterCount(AMP_HeroCharacter* ShooterCharacterToRegister)
 {
 	if (!TeamCount.Contains(ShooterCharacterToRegister->GetTeam()))
 	{
@@ -16,7 +16,7 @@ void AMP_TeamDeathMatchGameState::AddShooterCharacterCount(AMP_ShooterCharacter*
 	TeamCount[ShooterCharacterToRegister->GetTeam()]++;
 }
 
-void AMP_TeamDeathMatchGameState::OnShooterCharacterDeath(ABaseShooterCharacter* DeadShooterCharacter)
+void AMP_TeamDeathMatchGameState::OnShooterCharacterDeath(ABaseHeroCharacter* DeadShooterCharacter)
 {
 	Super::OnShooterCharacterDeath(DeadShooterCharacter);
 	
@@ -30,7 +30,7 @@ void AMP_TeamDeathMatchGameState::OnShooterCharacterDeath(ABaseShooterCharacter*
 
 void AMP_TeamDeathMatchGameState::EndGame(ETeam WinningTeam)
 {
-	if (AMP_ShooterPlayerController* LocalShooterController = Cast<AMP_ShooterPlayerController>(GetWorld()->GetFirstPlayerController()))
+	if (AMP_HeroPlayerController* LocalShooterController = Cast<AMP_HeroPlayerController>(GetWorld()->GetFirstPlayerController()))
 	{
 		if (WinningTeam == ETeam::BlueTeam)
 		{
@@ -44,7 +44,7 @@ void AMP_TeamDeathMatchGameState::EndGame(ETeam WinningTeam)
 
 	if (HasAuthority())
 	{
-		if (AMP_ShooterGameMode* ShooterGameMode = Cast<AMP_ShooterGameMode>(GetWorld()->GetAuthGameMode()))
+		if (AMP_BaseGameMode* ShooterGameMode = Cast<AMP_BaseGameMode>(GetWorld()->GetAuthGameMode()))
 		{
 			ShooterGameMode->CallLeaveSession();
 		}

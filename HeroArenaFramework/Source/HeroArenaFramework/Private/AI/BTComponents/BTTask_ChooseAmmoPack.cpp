@@ -6,8 +6,8 @@
 #include "AIController.h"
 #include "Actors/BaseAmmoPack.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "GameMode/Multiplayer/ShooterGameMode/MP_ShooterGameMode.h"
-#include "GameMode/SinglePlayer/SP_ShooterGameMode.h"
+#include "GameMode/Multiplayer/ShooterGameMode/MP_BaseGameMode.h"
+#include "GameMode/SinglePlayer/SP_BaseGameMode.h"
 
 UBTTask_ChooseAmmoPack::UBTTask_ChooseAmmoPack()
 {
@@ -23,8 +23,8 @@ EBTNodeResult::Type UBTTask_ChooseAmmoPack::ExecuteTask(UBehaviorTreeComponent& 
 	}
 	
 	//Since SP and MP GameMode do not inherit from the same base, we need to check both
-	ASP_ShooterGameMode* SP_GameMode = GetWorld()->GetAuthGameMode<ASP_ShooterGameMode>();
-	AMP_ShooterGameMode* MP_GameMode = GetWorld()->GetAuthGameMode<AMP_ShooterGameMode>();
+	ASP_BaseGameMode* SP_GameMode = GetWorld()->GetAuthGameMode<ASP_BaseGameMode>();
+	AMP_BaseGameMode* MP_GameMode = GetWorld()->GetAuthGameMode<AMP_BaseGameMode>();
 
 	if (SP_GameMode == nullptr && MP_GameMode == nullptr)
 	{

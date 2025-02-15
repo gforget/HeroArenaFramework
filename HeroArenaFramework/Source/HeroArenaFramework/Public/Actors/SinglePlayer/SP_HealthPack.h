@@ -7,7 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "SP_HealthPack.generated.h"
 
-class ASP_ShooterCharacter;
+class ASP_HeroCharacter;
 
 UCLASS()
 class HEROARENAFRAMEWORK_API ASP_HealthPack : public ABaseHealthPack

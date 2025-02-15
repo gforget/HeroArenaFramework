@@ -4,8 +4,8 @@
 #include "GameMode/SinglePlayer/SP_TeamDeathMatchGameMode.h"
 
 #include "Actors/BaseSpawningPoint.h"
-#include "Actors/SinglePlayer/SP_ShooterCharacter.h"
-#include "Controllers/SinglePlayer/SP_ShooterPlayerController.h"
+#include "Actors/SinglePlayer/SP_HeroCharacter.h"
+#include "Controllers/SinglePlayer/SP_HeroPlayerController.h"
 #include "GameMode/MainGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -14,7 +14,7 @@ ASP_TeamDeathMatchGameMode::ASP_TeamDeathMatchGameMode()
 	FactionManagerComponent->AllianceMode = EAllianceMode::Team;
 }
 
-void ASP_TeamDeathMatchGameMode::OnShooterCharacterDeath(ABaseShooterCharacter* DeadShooterCharacter)
+void ASP_TeamDeathMatchGameMode::OnShooterCharacterDeath(ABaseHeroCharacter* DeadShooterCharacter)
 {
 	Super::OnShooterCharacterDeath(DeadShooterCharacter);
 	
@@ -26,7 +26,7 @@ void ASP_TeamDeathMatchGameMode::OnShooterCharacterDeath(ABaseShooterCharacter* 
 	}
 }
 
-void ASP_TeamDeathMatchGameMode::AddShooterCharacterCount(ABaseShooterCharacter* ShooterCharacterToRegister)
+void ASP_TeamDeathMatchGameMode::AddShooterCharacterCount(ABaseHeroCharacter* ShooterCharacterToRegister)
 {
 	Super::AddShooterCharacterCount(ShooterCharacterToRegister);
 	
@@ -75,13 +75,13 @@ void ASP_TeamDeathMatchGameMode::BeginPlay()
 			
 			if (i==0) // put the spawned player at a spawn position
 			{
-				ASP_ShooterCharacter* ShooterCharacter = WorldPtr->SpawnActor<ASP_ShooterCharacter>(
+				ASP_HeroCharacter* ShooterCharacter = WorldPtr->SpawnActor<ASP_HeroCharacter>(
 					CurrentSpawningPoint->BlueTeamShooterCharacterClass,
 					CurrentSpawningPoint->GetActorLocation(),
 					CurrentSpawningPoint->GetActorRotation()
 				);
 				
-				if (ASP_ShooterPlayerController* PlayerController = Cast<ASP_ShooterPlayerController>(GetWorld()->GetFirstPlayerController()))
+				if (ASP_HeroPlayerController* PlayerController = Cast<ASP_HeroPlayerController>(GetWorld()->GetFirstPlayerController()))
 				{
 					PlayerController->Possess(ShooterCharacter);
 					PlayerController->InstantiateGameModeHUD(GameModeHUDClass);
@@ -89,13 +89,13 @@ void ASP_TeamDeathMatchGameMode::BeginPlay()
 			}
 			else
 			{
-				ASP_ShooterCharacter* ShooterCharacter = WorldPtr->SpawnActor<ASP_ShooterCharacter>(
+				ASP_HeroCharacter* ShooterCharacter = WorldPtr->SpawnActor<ASP_HeroCharacter>(
 					CurrentSpawningPoint->BlueTeamShooterCharacterClass,
 					CurrentSpawningPoint->GetActorLocation(),
 					CurrentSpawningPoint->GetActorRotation()
 				);
 				
-				if (ASP_ShooterPlayerController* PlayerController = Cast<ASP_ShooterPlayerController>(GetWorld()->GetFirstPlayerController()))
+				if (ASP_HeroPlayerController* PlayerController = Cast<ASP_HeroPlayerController>(GetWorld()->GetFirstPlayerController()))
 				{
 					PlayerController->AddOHHealthBar(ShooterCharacter);
 				}
@@ -110,13 +110,13 @@ void ASP_TeamDeathMatchGameMode::BeginPlay()
 			const int SpawnIndex = FMath::RandRange(0, AllRedSpawnPoints.Num()-1);
 			const ABaseSpawningPoint* CurrentSpawningPoint = AllRedSpawnPoints[SpawnIndex];
 
-			ASP_ShooterCharacter* ShooterCharacter = WorldPtr->SpawnActor<ASP_ShooterCharacter>(
+			ASP_HeroCharacter* ShooterCharacter = WorldPtr->SpawnActor<ASP_HeroCharacter>(
 				CurrentSpawningPoint->RedTeamShooterCharacterClass,
 				CurrentSpawningPoint->GetActorLocation(),
 				CurrentSpawningPoint->GetActorRotation()
 			);
 				
-			if (ASP_ShooterPlayerController* PlayerController = Cast<ASP_ShooterPlayerController>(GetWorld()->GetFirstPlayerController()))
+			if (ASP_HeroPlayerController* PlayerController = Cast<ASP_HeroPlayerController>(GetWorld()->GetFirstPlayerController()))
 			{
 				PlayerController->AddOHHealthBar(ShooterCharacter);
 			}
@@ -128,7 +128,7 @@ void ASP_TeamDeathMatchGameMode::BeginPlay()
 
 void ASP_TeamDeathMatchGameMode::EndGame(ETeam TeamWin)
 {
-	if (ASP_ShooterPlayerController* PlayerController = Cast<ASP_ShooterPlayerController>(GetWorld()->GetFirstPlayerController()))
+	if (ASP_HeroPlayerController* PlayerController = Cast<ASP_HeroPlayerController>(GetWorld()->GetFirstPlayerController()))
 	{
 		if (PlayerTeam == TeamWin)
 		{

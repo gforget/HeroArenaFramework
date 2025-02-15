@@ -3,7 +3,7 @@
 
 #include "Actors/BaseItemPack.h"
 
-#include "Actors/BaseShooterCharacter.h"
+#include "Actors/BaseHeroCharacter.h"
 #include "Components/BoxComponent.h"
 
 
@@ -67,7 +67,7 @@ void ABaseItemPack::Tick(float DeltaTime)
 			{
 				for (int i=0; i<OverlapResults.Num(); i++)
 				{
-					if (ABaseShooterCharacter* ShooterCharacter = Cast<ABaseShooterCharacter>(OverlapResults[i].GetActor()))
+					if (ABaseHeroCharacter* ShooterCharacter = Cast<ABaseHeroCharacter>(OverlapResults[i].GetActor()))
 					{
 						AttemptGivePackTo(ShooterCharacter);
 					}
@@ -82,7 +82,7 @@ bool ABaseItemPack::IsRecharging()
 	return RechargeTimer > 0.0f;
 }
 
-void ABaseItemPack::AttemptGivePackTo(ABaseShooterCharacter* TargetShooterCharacter)
+void ABaseItemPack::AttemptGivePackTo(ABaseHeroCharacter* TargetShooterCharacter)
 {
 	if (!IsRecharging() && PackValidation(TargetShooterCharacter))
 	{
@@ -90,20 +90,20 @@ void ABaseItemPack::AttemptGivePackTo(ABaseShooterCharacter* TargetShooterCharac
 	}
 }
 
-void ABaseItemPack::GivePackTo(ABaseShooterCharacter* TargetShooterCharacter)
+void ABaseItemPack::GivePackTo(ABaseHeroCharacter* TargetShooterCharacter)
 {
 	RechargeTimer = TimeToRecharge;
 	Mesh->SetMaterial(0, InactiveMaterial);
 }
 
-bool ABaseItemPack::PackValidation(ABaseShooterCharacter* TargetShooterCharacter)
+bool ABaseItemPack::PackValidation(ABaseHeroCharacter* TargetShooterCharacter)
 {
 	return true;
 }
 
 void ABaseItemPack::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 {
-	if (ABaseShooterCharacter* ShooterCharacter = Cast<ABaseShooterCharacter>(OtherActor))
+	if (ABaseHeroCharacter* ShooterCharacter = Cast<ABaseHeroCharacter>(OtherActor))
 	{
 		AttemptGivePackTo(ShooterCharacter);
 	}

@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Actors/BaseHealthPack.h"
 #include "MP_HealthPack.generated.h"
-class AMP_ShooterCharacter;
+class AMP_HeroCharacter;
 UCLASS()
 class HEROARENAFRAMEWORK_API AMP_HealthPack : public ABaseHealthPack
 {

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SP_ShooterGameMode.h"
+#include "SP_BaseGameMode.h"
 #include "SP_FFADeathMatchGameMode.generated.h"
 
 /**
@@ -11,15 +11,15 @@
  */
 class UGameModeHUD;
 UCLASS()
-class HEROARENAFRAMEWORK_API ASP_FFADeathMatchGameMode : public ASP_ShooterGameMode
+class HEROARENAFRAMEWORK_API ASP_FFADeathMatchGameMode : public ASP_BaseGameMode
 {
 	GENERATED_BODY()
 	
 public:
 	ASP_FFADeathMatchGameMode();
 	
-	void OnShooterCharacterDeath(ABaseShooterCharacter* DeadShooterCharacter) override;
-	void AddShooterCharacterCount(ABaseShooterCharacter* ShooterCharacterToRegister) override;
+	void OnShooterCharacterDeath(ABaseHeroCharacter* DeadShooterCharacter) override;
+	void AddShooterCharacterCount(ABaseHeroCharacter* ShooterCharacterToRegister) override;
 
 	UPROPERTY(BlueprintReadOnly)
 	int NbShooterAlive;

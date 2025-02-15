@@ -5,10 +5,10 @@
 
 #include "AIController.h"
 #include "Actors/BaseHealthPack.h"
-#include "Actors/BaseShooterCharacter.h"
+#include "Actors/BaseHeroCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "GameMode/Multiplayer/ShooterGameMode/MP_ShooterGameMode.h"
-#include "GameMode/SinglePlayer/SP_ShooterGameMode.h"
+#include "GameMode/Multiplayer/ShooterGameMode/MP_BaseGameMode.h"
+#include "GameMode/SinglePlayer/SP_BaseGameMode.h"
 #include "Utility/NavMeshUtility.h"
 
 UBTService_SelectHealthPack::UBTService_SelectHealthPack()
@@ -33,8 +33,8 @@ ABaseHealthPack* UBTService_SelectHealthPack::GetClosestHealthPack()
 	ABaseHealthPack* SelectedHealthPack = nullptr;
 	
 	//Since SP and MP GameMode do not inherit from the same base, we need to check both
-	ASP_ShooterGameMode* SP_GameMode = GetWorld()->GetAuthGameMode<ASP_ShooterGameMode>();
-	AMP_ShooterGameMode* MP_GameMode = GetWorld()->GetAuthGameMode<AMP_ShooterGameMode>();
+	ASP_BaseGameMode* SP_GameMode = GetWorld()->GetAuthGameMode<ASP_BaseGameMode>();
+	AMP_BaseGameMode* MP_GameMode = GetWorld()->GetAuthGameMode<AMP_BaseGameMode>();
 
 	if (SP_GameMode == nullptr && MP_GameMode == nullptr)
 	{
@@ -50,7 +50,7 @@ ABaseHealthPack* UBTService_SelectHealthPack::GetClosestHealthPack()
 	{
 		if (!ConsideredHealthPacks[i]->IsRecharging())
 		{
-			const ABaseShooterCharacter* AICharacter = Cast<ABaseShooterCharacter>(OwnerCompPtr->GetAIOwner()->GetPawn());
+			const ABaseHeroCharacter* AICharacter = Cast<ABaseHeroCharacter>(OwnerCompPtr->GetAIOwner()->GetPawn());
 			const float CurrentDistance = AICharacter->NavMeshUtility->GetPathLength(CharLocation, ConsideredHealthPacks[i]->GetActorLocation(), CurrentWorldPtr);
 			
 			if (CurrentDistance < HighestDistance)

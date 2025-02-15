@@ -7,7 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "MP_SpawningPoint.generated.h"
 
-class AMP_ShooterCharacter;
+class AMP_HeroCharacter;
 
 UCLASS()
 class HEROARENAFRAMEWORK_API AMP_SpawningPoint : public ABaseSpawningPoint

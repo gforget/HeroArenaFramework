@@ -2,14 +2,14 @@
 
 
 #include "Actors/BaseAmmoPack.h"
-#include "Actors/BaseShooterCharacter.h"
+#include "Actors/BaseHeroCharacter.h"
 
-bool ABaseAmmoPack::PackValidation(ABaseShooterCharacter* TargetShooterCharacter)
+bool ABaseAmmoPack::PackValidation(ABaseHeroCharacter* TargetShooterCharacter)
 {
 	return TargetShooterCharacter->GetAmmoReservePercent() < 1.0f;
 }
 
-void ABaseAmmoPack::GivePackTo(ABaseShooterCharacter* TargetShooterCharacter)
+void ABaseAmmoPack::GivePackTo(ABaseHeroCharacter* TargetShooterCharacter)
 {
 	Super::GivePackTo(TargetShooterCharacter);
 	TargetShooterCharacter->AddAmmoReserve(AmmoAmount);

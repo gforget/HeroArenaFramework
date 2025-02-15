@@ -7,7 +7,7 @@
 #include "VisualStimuli_ShooterCharacter.generated.h"
 
 class UCapsuleComponent;
-class ABaseShooterCharacter;
+class ABaseHeroCharacter;
 UCLASS()
 class HEROARENAFRAMEWORK_API AVisualStimuli_ShooterCharacter : public AVisualStimuli
 {
@@ -28,13 +28,13 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UCapsuleComponent* CapsuleComponent;
 
-	ABaseShooterCharacter* GetShooterCharacterRef();
-	void SetShooterCharacterRef(class ABaseShooterCharacter* ShooterCharacterRefValue);
+	ABaseHeroCharacter* GetShooterCharacterRef();
+	void SetShooterCharacterRef(class ABaseHeroCharacter* ShooterCharacterRefValue);
 	
 private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Root;
 	
 	UPROPERTY()
-	ABaseShooterCharacter* ShooterCharacterRef;
+	ABaseHeroCharacter* ShooterCharacterRef;
 };

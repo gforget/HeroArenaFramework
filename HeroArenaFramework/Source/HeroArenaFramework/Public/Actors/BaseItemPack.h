@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "BaseItemPack.generated.h"
 class UBoxComponent;
-class ABaseShooterCharacter;
+class ABaseHeroCharacter;
 
 UCLASS(Abstract)
 class HEROARENAFRAMEWORK_API ABaseItemPack : public AActor
@@ -39,9 +39,9 @@ protected:
 	UPROPERTY()
 	float RechargeTimer = 0.0f;
 
-	void AttemptGivePackTo(ABaseShooterCharacter* TargetShooterCharacter);
-	virtual void GivePackTo(ABaseShooterCharacter* TargetShooterCharacter);
-	virtual bool PackValidation(ABaseShooterCharacter* TargetShooterCharacter);
+	void AttemptGivePackTo(ABaseHeroCharacter* TargetShooterCharacter);
+	virtual void GivePackTo(ABaseHeroCharacter* TargetShooterCharacter);
+	virtual bool PackValidation(ABaseHeroCharacter* TargetShooterCharacter);
 	
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Root;

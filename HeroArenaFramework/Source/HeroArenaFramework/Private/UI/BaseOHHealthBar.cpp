@@ -3,7 +3,7 @@
 
 #include "UI/BaseOHHealthBar.h"
 
-#include "Actors/BaseShooterCharacter.h"
+#include "Actors/BaseHeroCharacter.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
 #include "Components/CanvasPanelSlot.h"
 #include "Components/Overlay.h"
@@ -14,7 +14,7 @@ bool UBaseOHHealthBar::Initialize()
 	return Super::Initialize();
 }
 
-void UBaseOHHealthBar::InitializeAssignedCharacterAndPlayerController(ABaseShooterCharacter* AssignedCharacterRef)
+void UBaseOHHealthBar::InitializeAssignedCharacterAndPlayerController(ABaseHeroCharacter* AssignedCharacterRef)
 {
 	AssignedCharacter = AssignedCharacterRef;
 	AssignedCharacter->OnDeadEvent.AddDynamic(this, &UBaseOHHealthBar::OnCharacterDeath);
@@ -70,7 +70,7 @@ void UBaseOHHealthBar::NativeTick(const FGeometry& MyGeometry, float InDeltaTime
 	}
 }
 
-void UBaseOHHealthBar::OnCharacterDeath(ABaseShooterCharacter* DeadCharacter)
+void UBaseOHHealthBar::OnCharacterDeath(ABaseHeroCharacter* DeadCharacter)
 {
 	RemoveFromParent();
 }

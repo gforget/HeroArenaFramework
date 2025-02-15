@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "Actors/Multiplayer/MP_Gun.h"
 
-#include "Actors/Multiplayer/MP_ShooterCharacter.h"
+#include "Actors/Multiplayer/MP_HeroCharacter.h"
 #include "Actors/RotationViewPointRef.h"
 #include "Engine/DamageEvents.h"
 #include "Kismet/GameplayStatics.h"
@@ -24,7 +24,7 @@ void AMP_Gun::BeginPlay()
 void AMP_Gun::Fire()
 {
 	Super::Fire();
-	AMP_ShooterCharacter* CharacterOwner = Cast<AMP_ShooterCharacter>(GetOwner());
+	AMP_HeroCharacter* CharacterOwner = Cast<AMP_HeroCharacter>(GetOwner());
 	if (CharacterOwner == nullptr)
 	{
 		return;	
@@ -89,7 +89,7 @@ void AMP_Gun::Fire()
 
 bool AMP_Gun::GunTrace(FHitResult& Hit, FVector& ShotDirection)
 {
-	AMP_ShooterCharacter* CharacterOwner = Cast<AMP_ShooterCharacter>(GetOwner());
+	AMP_HeroCharacter* CharacterOwner = Cast<AMP_HeroCharacter>(GetOwner());
 	
 	if (CharacterOwner == nullptr) return false;
 	

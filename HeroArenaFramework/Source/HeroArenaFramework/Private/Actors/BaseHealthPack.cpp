@@ -2,14 +2,14 @@
 
 
 #include "Actors/BaseHealthPack.h"
-#include "Actors/BaseShooterCharacter.h"
+#include "Actors/BaseHeroCharacter.h"
 
-bool ABaseHealthPack::PackValidation(ABaseShooterCharacter* TargetShooterCharacter)
+bool ABaseHealthPack::PackValidation(ABaseHeroCharacter* TargetShooterCharacter)
 {
 	return TargetShooterCharacter->GetHealthPercent() < 1.0f;
 }
 
-void ABaseHealthPack::GivePackTo(ABaseShooterCharacter* TargetShooterCharacter)
+void ABaseHealthPack::GivePackTo(ABaseHeroCharacter* TargetShooterCharacter)
 {
 	Super::GivePackTo(TargetShooterCharacter);
 	TargetShooterCharacter->Heal(HealAmount);

@@ -7,7 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "SP_AmmoPack.generated.h"
 
-class ASP_ShooterCharacter;
+class ASP_HeroCharacter;
 UCLASS()
 class HEROARENAFRAMEWORK_API ASP_AmmoPack : public ABaseAmmoPack
 {

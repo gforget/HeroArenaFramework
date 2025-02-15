@@ -7,7 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "BaseSpawningPoint.generated.h"
 
-class ABaseShooterCharacter;
+class ABaseHeroCharacter;
 
 UCLASS()
 class HEROARENAFRAMEWORK_API ABaseSpawningPoint : public AActor
@@ -25,19 +25,19 @@ public:
 	UTexture2D* BlueTeamIconTexture;
 	
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ABaseShooterCharacter> BlueTeamShooterCharacterClass;
+	TSubclassOf<ABaseHeroCharacter> BlueTeamShooterCharacterClass;
 
 	UPROPERTY(EditDefaultsOnly)
 	UTexture2D* RedTeamIconTexture;
 	
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ABaseShooterCharacter> RedTeamShooterCharacterClass;
+	TSubclassOf<ABaseHeroCharacter> RedTeamShooterCharacterClass;
 
 	UPROPERTY(EditDefaultsOnly)
 	UTexture2D* NoTeamIconTexture;
 	
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ABaseShooterCharacter> NoTeamShooterCharacterClass;
+	TSubclassOf<ABaseHeroCharacter> NoTeamShooterCharacterClass;
 	
 protected:
 	// Called when the game starts or when spawned

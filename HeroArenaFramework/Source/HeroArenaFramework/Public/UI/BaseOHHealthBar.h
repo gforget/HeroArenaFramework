@@ -6,7 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "BaseOHHealthBar.generated.h"
 
-class ABaseShooterCharacter;
+class ABaseHeroCharacter;
 class UOverlay;
 class UProgressBar;
 
@@ -29,10 +29,10 @@ public :
 	UProgressBar* OHHealthBarProgressBar;
 	
 	UPROPERTY(BlueprintReadOnly)
-	ABaseShooterCharacter* AssignedCharacter;
+	ABaseHeroCharacter* AssignedCharacter;
 
 	UFUNCTION()
-	void OnCharacterDeath(ABaseShooterCharacter* DeadCharacter);
+	void OnCharacterDeath(ABaseHeroCharacter* DeadCharacter);
 
-	void InitializeAssignedCharacterAndPlayerController(ABaseShooterCharacter* AssignedCharacterRef);
+	void InitializeAssignedCharacterAndPlayerController(ABaseHeroCharacter* AssignedCharacterRef);
 };

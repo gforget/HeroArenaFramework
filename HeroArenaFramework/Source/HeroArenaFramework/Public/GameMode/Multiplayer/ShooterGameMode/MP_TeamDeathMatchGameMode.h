@@ -3,16 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MP_ShooterGameMode.h"
+#include "MP_BaseGameMode.h"
 #include "MP_TeamDeathMatchGameMode.generated.h"
 
 /**
  * 
  */
 class UGameModeHUD;
-class AMP_ShooterPlayerController;
+class AMP_HeroPlayerController;
 UCLASS()
-class HEROARENAFRAMEWORK_API AMP_TeamDeathMatchGameMode : public AMP_ShooterGameMode
+class HEROARENAFRAMEWORK_API AMP_TeamDeathMatchGameMode : public AMP_BaseGameMode
 {
 	GENERATED_BODY()
 

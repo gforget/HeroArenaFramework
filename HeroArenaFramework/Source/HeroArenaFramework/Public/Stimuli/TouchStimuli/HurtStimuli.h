@@ -6,8 +6,8 @@
 #include "Stimuli/TouchStimuli.h"
 #include "HurtStimuli.generated.h"
 
-class ABaseShooterCharacter;
-class ABaseShooterAIController;
+class ABaseHeroCharacter;
+class ABaseHeroAIController;
 /**
  * 
  */
@@ -17,26 +17,26 @@ class HEROARENAFRAMEWORK_API UHurtStimuli : public UTouchStimuli
 	GENERATED_BODY()
 
 public :
-	void Initialize(ABaseShooterAIController* OwnerControllerRef, ABaseShooterCharacter* OwnerCharacterRef);
+	void Initialize(ABaseHeroAIController* OwnerControllerRef, ABaseHeroCharacter* OwnerCharacterRef);
 	
 	void SetDamageDone(float DamageDoneRef);
 	float GetDamageDone();
 	
-	void SetDamageDealer(ABaseShooterCharacter* DamageDealerRef);
-	ABaseShooterCharacter* GetDamageDealer();
+	void SetDamageDealer(ABaseHeroCharacter* DamageDealerRef);
+	ABaseHeroCharacter* GetDamageDealer();
 
 private:
 	UPROPERTY()
-	ABaseShooterAIController* OwnerController;
+	ABaseHeroAIController* OwnerController;
 
 	UPROPERTY()
-	ABaseShooterCharacter* OwnerCharacter;
+	ABaseHeroCharacter* OwnerCharacter;
 	
 	UPROPERTY()
 	float DamageDone;
 	
 	UPROPERTY()
-	ABaseShooterCharacter* DamageDealer;
+	ABaseHeroCharacter* DamageDealer;
 
 	UFUNCTION()
 	void OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameMode/Multiplayer/ShooterGameMode/MP_ShooterGameState.h"
+#include "GameMode/Multiplayer/ShooterGameMode/MP_BaseGameState.h"
 #include "ActorComponents/TeamManager.h"
 #include "MP_LobbyGameState.generated.h"
 
@@ -11,7 +11,7 @@
  * 
  */
 UCLASS()
-class HEROARENAFRAMEWORK_API AMP_LobbyGameState : public AMP_ShooterGameState
+class HEROARENAFRAMEWORK_API AMP_LobbyGameState : public AMP_BaseGameState
 {
 	GENERATED_BODY()
 public:

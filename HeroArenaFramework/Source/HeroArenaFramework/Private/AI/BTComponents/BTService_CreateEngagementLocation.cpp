@@ -3,7 +3,7 @@
 
 #include "AI/BTComponents/BTService_CreateEngagementLocation.h"
 #include "AIController.h"
-#include "Actors/BaseShooterCharacter.h"
+#include "Actors/BaseHeroCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Utility/NavMeshUtility.h"
 
@@ -17,8 +17,8 @@ void UBTService_CreateEngagementLocation::TickNode(UBehaviorTreeComponent& Owner
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 	
 	UBehaviorTreeComponent* OwnerCompPtr = &OwnerComp;
-	const ABaseShooterCharacter* EnemyInSight = Cast<ABaseShooterCharacter>(OwnerCompPtr->GetBlackboardComponent()->GetValueAsObject(FName("EnemyInSight")));
-	const ABaseShooterCharacter* AICharacter = Cast<ABaseShooterCharacter>(Cast<ABaseShooterCharacter>(OwnerCompPtr->GetAIOwner()->GetPawn()));
+	const ABaseHeroCharacter* EnemyInSight = Cast<ABaseHeroCharacter>(OwnerCompPtr->GetBlackboardComponent()->GetValueAsObject(FName("EnemyInSight")));
+	const ABaseHeroCharacter* AICharacter = Cast<ABaseHeroCharacter>(Cast<ABaseHeroCharacter>(OwnerCompPtr->GetAIOwner()->GetPawn()));
 	
 	if (EnemyInSight != nullptr)
 	{
@@ -78,7 +78,7 @@ void UBTService_CreateEngagementLocation::TickNode(UBehaviorTreeComponent& Owner
 							{
 								//Check if the bot could still see his target from the new position
 								FVector EyesFutureLocation = GroundLocation + DeltaEyesPosition;
-								EyesFutureLocation.Z += Cast<ABaseShooterCharacter>(OwnerCompPtr->GetAIOwner()->GetPawn())->FootPositionAnchor.Z*-1.0f;
+								EyesFutureLocation.Z += Cast<ABaseHeroCharacter>(OwnerCompPtr->GetAIOwner()->GetPawn())->FootPositionAnchor.Z*-1.0f;
 
 								if (!GetWorld()->LineTraceSingleByChannel(Hit, EyesFutureLocation, EnemyInSight->GetActorLocation(), ECollisionChannel::ECC_GameTraceChannel1, Params))
 								{
@@ -132,7 +132,7 @@ void UBTService_CreateEngagementLocation::TickNode(UBehaviorTreeComponent& Owner
 			
 			for (int i=0; i<AllValidPositions.Num(); i++)
 			{
-				FVector FootAnchorPosition = Cast<ABaseShooterCharacter>(OwnerCompPtr->GetAIOwner()->GetPawn())->FootPositionAnchor;
+				FVector FootAnchorPosition = Cast<ABaseHeroCharacter>(OwnerCompPtr->GetAIOwner()->GetPawn())->FootPositionAnchor;
 			
 				FVector DeltaToEnemy = EnemyInSight->GetActorLocation() - AllValidPositions[i];
 				float ZDistance = DeltaToEnemy.Z*-1.0f;

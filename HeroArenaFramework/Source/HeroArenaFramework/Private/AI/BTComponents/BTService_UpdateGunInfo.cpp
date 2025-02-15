@@ -5,7 +5,7 @@
 
 #include "AIController.h"
 #include "Actors/BaseGun.h"
-#include "Actors/BaseShooterCharacter.h"
+#include "Actors/BaseHeroCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTService_UpdateGunInfo::UBTService_UpdateGunInfo()
@@ -27,7 +27,7 @@ void UBTService_UpdateGunInfo::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 
 float UBTService_UpdateGunInfo::GetAmmoReservePercent()
 {
-	const ABaseShooterCharacter* AICharacter = Cast<ABaseShooterCharacter>(OwnerCompPtr->GetAIOwner()->GetPawn());
+	const ABaseHeroCharacter* AICharacter = Cast<ABaseHeroCharacter>(OwnerCompPtr->GetAIOwner()->GetPawn());
 	if (AICharacter == nullptr)
 	{
 		return 0.0f;
@@ -38,7 +38,7 @@ float UBTService_UpdateGunInfo::GetAmmoReservePercent()
 
 float UBTService_UpdateGunInfo::GetAmmoInGunPercent()
 {
-	const ABaseShooterCharacter* AICharacter = Cast<ABaseShooterCharacter>(OwnerCompPtr->GetAIOwner()->GetPawn());
+	const ABaseHeroCharacter* AICharacter = Cast<ABaseHeroCharacter>(OwnerCompPtr->GetAIOwner()->GetPawn());
 	if (AICharacter == nullptr)
 	{
 		return 0.0f;
@@ -49,7 +49,7 @@ float UBTService_UpdateGunInfo::GetAmmoInGunPercent()
 
 float UBTService_UpdateGunInfo::GetAmmoInTotalPercent()
 {
-	const ABaseShooterCharacter* AICharacter = Cast<ABaseShooterCharacter>(OwnerCompPtr->GetAIOwner()->GetPawn());
+	const ABaseHeroCharacter* AICharacter = Cast<ABaseHeroCharacter>(OwnerCompPtr->GetAIOwner()->GetPawn());
 	if (AICharacter == nullptr)
 	{
 		return 0.0f;

@@ -3,7 +3,7 @@
 
 #include "Actors/Multiplayer/MP_Waypoint.h"
 
-#include "GameMode/Multiplayer/ShooterGameMode/MP_ShooterGameMode.h"
+#include "GameMode/Multiplayer/ShooterGameMode/MP_BaseGameMode.h"
 
 
 // Sets default values
@@ -15,7 +15,7 @@ AMP_Waypoint::AMP_Waypoint()
 void AMP_Waypoint::BeginPlay()
 {
 	Super::BeginPlay();
-	AMP_ShooterGameMode* GameModeBase = GetWorld()->GetAuthGameMode<AMP_ShooterGameMode>();
+	AMP_BaseGameMode* GameModeBase = GetWorld()->GetAuthGameMode<AMP_BaseGameMode>();
 	if (GameModeBase != nullptr)
 	{
 		GameModeBase->AddWayPoint(this);

@@ -3,9 +3,9 @@
 #include "GameMode/Multiplayer/ShooterGameMode/MP_TeamDeathMatchGameMode.h"
 
 #include "Actors/BaseSpawningPoint.h"
-#include "Actors/Multiplayer/MP_ShooterCharacter.h"
-#include "Controllers/Multiplayer/MP_ShooterAIController.h"
-#include "Controllers/Multiplayer/MP_ShooterPlayerController.h"
+#include "Actors/Multiplayer/MP_HeroCharacter.h"
+#include "Controllers/Multiplayer/MP_HeroAIController.h"
+#include "Controllers/Multiplayer/MP_HeroPlayerController.h"
 #include "GameMode/MainGameInstance.h"
 #include "GameMode/Multiplayer/MP_ShooterPlayerState.h"
 
@@ -24,13 +24,13 @@ void AMP_TeamDeathMatchGameMode::BeginPlay()
 	{
 		for (FBotData BotData : GameInstance->BotDataStructs)
 		{
-			AMP_ShooterCharacter* ShooterCharacter = nullptr;
+			AMP_HeroCharacter* ShooterCharacter = nullptr;
 			if (BotData.Team == ETeam::BlueTeam)
 			{
 				const int SpawnIndex = FMath::RandRange(0, AllBlueSpawnPoints.Num()-1);
 				const ABaseSpawningPoint* CurrentSpawningPoint = AllBlueSpawnPoints[SpawnIndex];
 		
-				ShooterCharacter = WorldPtr->SpawnActor<AMP_ShooterCharacter>(
+				ShooterCharacter = WorldPtr->SpawnActor<AMP_HeroCharacter>(
 					CurrentSpawningPoint->BlueTeamShooterCharacterClass,
 					CurrentSpawningPoint->GetActorLocation(),
 					CurrentSpawningPoint->GetActorRotation()
@@ -43,7 +43,7 @@ void AMP_TeamDeathMatchGameMode::BeginPlay()
 				const int SpawnIndex = FMath::RandRange(0, AllRedSpawnPoints.Num()-1);
 				const ABaseSpawningPoint* CurrentSpawningPoint = AllRedSpawnPoints[SpawnIndex];
 		
-				ShooterCharacter = WorldPtr->SpawnActor<AMP_ShooterCharacter>(
+				ShooterCharacter = WorldPtr->SpawnActor<AMP_HeroCharacter>(
 					CurrentSpawningPoint->RedTeamShooterCharacterClass,
 					CurrentSpawningPoint->GetActorLocation(),
 					CurrentSpawningPoint->GetActorRotation()
@@ -55,7 +55,7 @@ void AMP_TeamDeathMatchGameMode::BeginPlay()
 			if (ShooterCharacter != nullptr)
 			{
 				//Need to create an MP version of AIController
-				AMP_ShooterAIController* BotController = WorldPtr->SpawnActor<AMP_ShooterAIController>(
+				AMP_HeroAIController* BotController = WorldPtr->SpawnActor<AMP_HeroAIController>(
 					ShooterAIController,
 					FVector::Zero(),
 					FRotator::ZeroRotator
@@ -81,14 +81,14 @@ void AMP_TeamDeathMatchGameMode::OnPostLogin(AController* NewPlayer)
 		FPlayerStateData PlayerStateData = GameInstance->PlayerStateDataStructs[PlayerState->GetUniqueId().ToString()];
 		PlayerState->Team = PlayerStateData.Team;
 
-		AMP_ShooterCharacter* ShooterCharacter = nullptr;
+		AMP_HeroCharacter* ShooterCharacter = nullptr;
 		
 		if (PlayerState->Team == ETeam::BlueTeam)
 		{
 			const int SpawnIndex = FMath::RandRange(0, AllBlueSpawnPoints.Num()-1);
 			const ABaseSpawningPoint* CurrentSpawningPoint = AllBlueSpawnPoints[SpawnIndex];
 		
-			ShooterCharacter = WorldPtr->SpawnActor<AMP_ShooterCharacter>(
+			ShooterCharacter = WorldPtr->SpawnActor<AMP_HeroCharacter>(
 				CurrentSpawningPoint->BlueTeamShooterCharacterClass,
 				CurrentSpawningPoint->GetActorLocation(),
 				CurrentSpawningPoint->GetActorRotation()
@@ -101,7 +101,7 @@ void AMP_TeamDeathMatchGameMode::OnPostLogin(AController* NewPlayer)
 			const int SpawnIndex = FMath::RandRange(0, AllRedSpawnPoints.Num()-1);
 			const ABaseSpawningPoint* CurrentSpawningPoint = AllRedSpawnPoints[SpawnIndex];
 		
-			ShooterCharacter = WorldPtr->SpawnActor<AMP_ShooterCharacter>(
+			ShooterCharacter = WorldPtr->SpawnActor<AMP_HeroCharacter>(
 				CurrentSpawningPoint->RedTeamShooterCharacterClass,
 				CurrentSpawningPoint->GetActorLocation(),
 				CurrentSpawningPoint->GetActorRotation()
@@ -112,7 +112,7 @@ void AMP_TeamDeathMatchGameMode::OnPostLogin(AController* NewPlayer)
 
 		if (ShooterCharacter != nullptr)
 		{
-			if (AMP_ShooterPlayerController* ShooterPlayerController = Cast<AMP_ShooterPlayerController>(NewPlayer))
+			if (AMP_HeroPlayerController* ShooterPlayerController = Cast<AMP_HeroPlayerController>(NewPlayer))
 			{
 				ShooterPlayerController->Possess(ShooterCharacter);
 			}

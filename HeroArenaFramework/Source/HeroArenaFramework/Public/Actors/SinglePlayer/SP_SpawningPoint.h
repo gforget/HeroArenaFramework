@@ -7,7 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "SP_SpawningPoint.generated.h"
 
-class ASP_ShooterCharacter;
+class ASP_HeroCharacter;
 
 UCLASS()
 class HEROARENAFRAMEWORK_API ASP_SpawningPoint : public ABaseSpawningPoint

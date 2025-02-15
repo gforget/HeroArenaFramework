@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MP_ShooterGameMode.h"
+#include "MP_BaseGameMode.h"
 #include "MP_FFADeathMatchGameMode.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class HEROARENAFRAMEWORK_API AMP_FFADeathMatchGameMode : public AMP_ShooterGameMode
+class HEROARENAFRAMEWORK_API AMP_FFADeathMatchGameMode : public AMP_BaseGameMode
 {
 	GENERATED_BODY()
 	

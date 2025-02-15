@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Actors/BaseGun.h"
-#include "Actors/BaseShooterCharacter.h"
+#include "Actors/BaseHeroCharacter.h"
 
 // Sets default values
 ABaseGun::ABaseGun()
@@ -29,7 +29,7 @@ void ABaseGun::BeginPlay()
 
 void ABaseGun::Fire()
 {
-	if (ABaseShooterCharacter* ShooterCharacter = Cast<ABaseShooterCharacter>(GetOwner())) 
+	if (ABaseHeroCharacter* ShooterCharacter = Cast<ABaseHeroCharacter>(GetOwner())) 
 	{
 		bool bIsReloading = ShooterCharacter->GetIsReloading();
 		// Check if spread update timer is not active and restart it
@@ -87,7 +87,7 @@ void ABaseGun::ReleaseTrigger()
 
 void ABaseGun::UpdateSpread()
 {
-	if (ABaseShooterCharacter* ShooterCharacter = Cast<ABaseShooterCharacter>(GetOwner())) 
+	if (ABaseHeroCharacter* ShooterCharacter = Cast<ABaseHeroCharacter>(GetOwner())) 
 	{
 		bool bIsReloading = ShooterCharacter->GetIsReloading();
 	

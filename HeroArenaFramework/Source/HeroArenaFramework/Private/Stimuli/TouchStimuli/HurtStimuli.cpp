@@ -3,10 +3,10 @@
 
 #include "Stimuli/TouchStimuli/HurtStimuli.h"
 
-#include "Actors/SinglePlayer/SP_ShooterCharacter.h"
-#include "Controllers/SinglePlayer/SP_ShooterAIController.h"
+#include "Actors/SinglePlayer/SP_HeroCharacter.h"
+#include "Controllers/SinglePlayer/SP_HeroAIController.h"
 
-void UHurtStimuli::Initialize(ABaseShooterAIController* OwnerControllerRef, ABaseShooterCharacter* OwnerCharacterRef)
+void UHurtStimuli::Initialize(ABaseHeroAIController* OwnerControllerRef, ABaseHeroCharacter* OwnerCharacterRef)
 {
 	OwnerController = OwnerControllerRef;
 	
@@ -24,12 +24,12 @@ float UHurtStimuli::GetDamageDone()
 	return DamageDone;
 }
 
-void UHurtStimuli::SetDamageDealer(ABaseShooterCharacter* DamageDealerRef)
+void UHurtStimuli::SetDamageDealer(ABaseHeroCharacter* DamageDealerRef)
 {
 	DamageDealer = DamageDealerRef;
 }
 
-ABaseShooterCharacter* UHurtStimuli::GetDamageDealer()
+ABaseHeroCharacter* UHurtStimuli::GetDamageDealer()
 {
 	return DamageDealer;
 }
@@ -37,6 +37,6 @@ ABaseShooterCharacter* UHurtStimuli::GetDamageDealer()
 void UHurtStimuli::OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
 	AController* InstigatedBy, AActor* DamageCauser)
 {
-	DamageDealer = Cast<ABaseShooterCharacter>(DamageCauser);
+	DamageDealer = Cast<ABaseHeroCharacter>(DamageCauser);
 	DamageDone = Damage;
 }

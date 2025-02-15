@@ -3,17 +3,17 @@
 
 #include "GameMode/Multiplayer/ShooterGameMode/MP_FFADeathMatchGameState.h"
 
-#include "Actors/Multiplayer/MP_ShooterCharacter.h"
-#include "Controllers/Multiplayer/MP_ShooterPlayerController.h"
-#include "GameMode/Multiplayer/ShooterGameMode/MP_ShooterGameMode.h"
+#include "Actors/Multiplayer/MP_HeroCharacter.h"
+#include "Controllers/Multiplayer/MP_HeroPlayerController.h"
+#include "GameMode/Multiplayer/ShooterGameMode/MP_BaseGameMode.h"
 
-void AMP_FFADeathMatchGameState::AddShooterCharacterCount(AMP_ShooterCharacter* ShooterCharacterToRegister)
+void AMP_FFADeathMatchGameState::AddShooterCharacterCount(AMP_HeroCharacter* ShooterCharacterToRegister)
 {
 	Super::AddShooterCharacterCount(ShooterCharacterToRegister);
 	ShooterCount++;
 }
 
-void AMP_FFADeathMatchGameState::OnShooterCharacterDeath(ABaseShooterCharacter* DeadShooterCharacter)
+void AMP_FFADeathMatchGameState::OnShooterCharacterDeath(ABaseHeroCharacter* DeadShooterCharacter)
 {
 	Super::OnShooterCharacterDeath(DeadShooterCharacter);
 	ShooterCount--;
@@ -25,7 +25,7 @@ void AMP_FFADeathMatchGameState::OnShooterCharacterDeath(ABaseShooterCharacter* 
 
 void AMP_FFADeathMatchGameState::EndGame()
 {
-	if (AMP_ShooterPlayerController* LocalShooterController = Cast<AMP_ShooterPlayerController>(GetWorld()->GetFirstPlayerController()))
+	if (AMP_HeroPlayerController* LocalShooterController = Cast<AMP_HeroPlayerController>(GetWorld()->GetFirstPlayerController()))
 	{
 		if (!LocalShooterController->AssignedShooterCharacter->IsDead())
 		{
@@ -39,7 +39,7 @@ void AMP_FFADeathMatchGameState::EndGame()
 	
 	if (HasAuthority())
 	{
-		if (AMP_ShooterGameMode* ShooterGameMode = Cast<AMP_ShooterGameMode>(GetWorld()->GetAuthGameMode()))
+		if (AMP_BaseGameMode* ShooterGameMode = Cast<AMP_BaseGameMode>(GetWorld()->GetAuthGameMode()))
 		{
 			ShooterGameMode->CallLeaveSession();
 		}
