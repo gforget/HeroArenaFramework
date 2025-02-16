@@ -25,6 +25,6 @@ EBTNodeResult::Type UBTTask_Shoot::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 		return EBTNodeResult::Failed;
 	}
 	
-	Character->PullTrigger();
+	//Character->PullTrigger();
 	return EBTNodeResult::Succeeded;
 }

@@ -27,6 +27,13 @@ ABaseHeroCharacter::ABaseHeroCharacter()
 	HeadCollision->SetupAttachment(GetMesh());
 	HeadCollision->SetCollisionProfileName(TEXT("OverlapAll")); // Adjust profile as needed
 	HeadCollision->SetGenerateOverlapEvents(true);
+
+	UCharacterMovementComponent* MovementComp = GetCharacterMovement();
+	MovementComp->NavAgentProps.bCanWalk = true;
+	MovementComp->NavAgentProps.bCanJump = true;
+	MovementComp->NavAgentProps.bCanFly = true;
+	MovementComp->NavAgentProps.bCanSwim = false;
+	MovementComp->NavAgentProps.bCanCrouch = false;
 }
 
 FVector ABaseHeroCharacter::GetHeadAnchorLocation() const
@@ -148,18 +155,30 @@ void ABaseHeroCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 			}
 		}
 	}
-	
-	// Make sure to use UEnhancedInputComponent.
+
+	// Bind input function to their action counterpart
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		// Bind the MoveAction to our Move() callback when triggered.
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::MoveInput);
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::LookInput);
-		EnhancedInputComponent->BindAction(LookRateAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::LookRateInput);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::JumpInput);
-		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::ShootInput);
-		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::ReloadInput);
+		if (MoveAction != nullptr) EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::MoveInput);
+		if (LookAction != nullptr) EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::LookInput);
+		if (LookRateAction != nullptr) EnhancedInputComponent->BindAction(LookRateAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::LookRateInput);
+		if (JumpAction != nullptr) EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::JumpInput);
+		if (GoUpAction != nullptr) EnhancedInputComponent->BindAction(GoUpAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::GoUpInput);
+		if (GoDownAction != nullptr) EnhancedInputComponent->BindAction(GoDownAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::GoDownInput);
+		if (ReloadAction != nullptr) EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::ReloadInput);
+		if (QuickMeleeAttackAction != nullptr) EnhancedInputComponent->BindAction(QuickMeleeAttackAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::QuickMeleeAttackInput);
+		if (UltimateAction != nullptr) EnhancedInputComponent->BindAction(UltimateAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::UltimateInput);
+		if (Ability1PressAction != nullptr) EnhancedInputComponent->BindAction(Ability1PressAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::Ability1PressInput);
+		if (Ability1HoldAction != nullptr) EnhancedInputComponent->BindAction(Ability1HoldAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::Ability1HoldInput);
+		if (Ability2PressAction != nullptr) EnhancedInputComponent->BindAction(Ability2PressAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::Ability2PressInput);
+		if (Ability2HoldAction != nullptr) EnhancedInputComponent->BindAction(Ability2HoldAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::Ability2HoldInput);
+		if (Ability3PressAction != nullptr) EnhancedInputComponent->BindAction(Ability3PressAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::Ability3PressInput);
+		if (Ability3HoldAction != nullptr) EnhancedInputComponent->BindAction(Ability3HoldAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::Ability3HoldInput);
+		if (Ability4PressAction != nullptr) EnhancedInputComponent->BindAction(Ability4PressAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::Ability4PressInput);
+		if (Ability4HoldAction != nullptr) EnhancedInputComponent->BindAction(Ability4HoldAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::Ability4HoldInput);
 	}
+	
+	//GetCharacterMovement()->SetMovementMode(MOVE_Flying);
 }
 
 float ABaseHeroCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
@@ -242,33 +261,86 @@ void ABaseHeroCharacter::LookRateInput(const FInputActionValue& Value)
 
 void ABaseHeroCharacter::JumpInput(const FInputActionValue& Value)
 {
-	ACharacter::Jump();
+	if (GetCharacterMovement()->GetMovementName() == "Walking")
+	{
+		ACharacter::Jump();
+	}
 }
 
-void ABaseHeroCharacter::ShootInput(const FInputActionValue& Value)
+void ABaseHeroCharacter::JumpAbilityInput(const FInputActionValue& Value)
 {
-	if (Value.Get<bool>())
+	if (GetCharacterMovement()->IsFalling())
 	{
-		PullTrigger();
-	}
-	else
-	{
-		ReleaseTrigger();
+		
 	}
 }
+
+void ABaseHeroCharacter::GoUpInput(const FInputActionValue& Value)
+{
+	if (GetCharacterMovement()->GetMovementName() == "Flying")
+	{
+	}
+}
+
+void ABaseHeroCharacter::GoDownInput(const FInputActionValue& Value)
+{
+	if (GetCharacterMovement()->GetMovementName() == "Flying")
+	{
+	}
+}
+
+void ABaseHeroCharacter::UltimateInput(const FInputActionValue& Value)
+{
+}
+
+void ABaseHeroCharacter::QuickMeleeAttackInput(const FInputActionValue& Value)
+{
+}
+
+void ABaseHeroCharacter::ShiftAbilityPressInput(const FInputActionValue& Value)
+{
+}
+
+void ABaseHeroCharacter::ShiftAbilityHoldInput(const FInputActionValue& Value)
+{
+}
+
+void ABaseHeroCharacter::Ability1PressInput(const FInputActionValue& Value)
+{
+}
+
+void ABaseHeroCharacter::Ability1HoldInput(const FInputActionValue& Value)
+{
+}
+
+void ABaseHeroCharacter::Ability2PressInput(const FInputActionValue& Value)
+{
+}
+
+void ABaseHeroCharacter::Ability2HoldInput(const FInputActionValue& Value)
+{
+}
+
+void ABaseHeroCharacter::Ability3PressInput(const FInputActionValue& Value)
+{
+}
+
+void ABaseHeroCharacter::Ability3HoldInput(const FInputActionValue& Value)
+{
+}
+
+void ABaseHeroCharacter::Ability4PressInput(const FInputActionValue& Value)
+{
+}
+
+void ABaseHeroCharacter::Ability4HoldInput(const FInputActionValue& Value)
+{
+}
+
 
 void ABaseHeroCharacter::ReloadInput(const FInputActionValue& Value)
 {
 	Reload();
-}
-
-void ABaseHeroCharacter::PullTrigger()
-{
-	
-}
-
-void ABaseHeroCharacter::ReleaseTrigger()
-{
 }
 
 void ABaseHeroCharacter::Reload()
@@ -294,8 +366,6 @@ void ABaseHeroCharacter::Death()
 {
 	if (!IsDead())
 	{
-		ReleaseTrigger();
-		
 		GetCharacterMovement()->GravityScale = 0.0f; //FOR MULTIPLAYER client for some reason pass through floor when no collision
 		GetCharacterMovement()->Velocity = FVector::Zero();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);

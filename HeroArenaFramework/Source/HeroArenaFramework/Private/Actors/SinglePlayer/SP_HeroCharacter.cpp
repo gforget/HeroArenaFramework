@@ -67,22 +67,6 @@ float ASP_HeroCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 	return DamageToApply;
 }
 
-void ASP_HeroCharacter::PullTrigger() //overriden
-{
-	if (Gun != nullptr)
-	{
-		Gun->PullTrigger();
-	}
-}
-
-void ASP_HeroCharacter::ReleaseTrigger() //overriden
-{
-	if (Gun != nullptr)
-	{
-		Gun->ReleaseTrigger();	
-	}
-}
-
 void ASP_HeroCharacter::Reload() //overriden
 {	
 	if (!IsReloading && AmmoReserve > 0 && Gun->GetAmmoPercent() < 1.0f )

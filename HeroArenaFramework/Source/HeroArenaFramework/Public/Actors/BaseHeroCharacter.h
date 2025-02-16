@@ -95,18 +95,13 @@ public:
 	void OnReloadAnimationCompleted(FName NotifyName);
 	
 	virtual void Reload();
-	virtual void PullTrigger();
-	virtual void ReleaseTrigger();
-
-	/** The default input mapping context to add on BeginPlay */
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	class UInputMappingContext* DefaultMappingContext;
-
-	/** The input action for movement (configured as a 2D axis) */
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	class UInputAction* MoveAction;
-
-	/** The input action for movement (configured as a 2D axis) */
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	class UInputAction* LookAction;
 
@@ -117,10 +112,52 @@ public:
 	class UInputAction* JumpAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* ShootAction;
+	class UInputAction* GoUpAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* GoDownAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	class UInputAction* ReloadAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* UltimateAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* QuickMeleeAttackAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* ShiftAbilityPressAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* ShiftAbilityHoldAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* JumpAbilityAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* Ability1PressAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* Ability1HoldAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* Ability2PressAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* Ability2HoldAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* Ability3PressAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* Ability3HoldAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* Ability4PressAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* Ability4HoldAction;
 	
 protected:
 	
@@ -204,8 +241,22 @@ protected:
 	void LookInput(const FInputActionValue& Value);
 	void LookRateInput(const FInputActionValue& Value);
 	void JumpInput(const FInputActionValue& Value);
-	void ShootInput(const FInputActionValue& Value);
+	void GoUpInput(const FInputActionValue& Value);
+	void GoDownInput(const FInputActionValue& Value);
 	void ReloadInput(const FInputActionValue& Value);
+	void UltimateInput(const FInputActionValue& Value);
+	void QuickMeleeAttackInput(const FInputActionValue& Value);
+	void ShiftAbilityPressInput(const FInputActionValue& Value);
+	void ShiftAbilityHoldInput(const FInputActionValue& Value);
+	void JumpAbilityInput(const FInputActionValue& Value);
+	void Ability1PressInput(const FInputActionValue& Value);
+	void Ability1HoldInput(const FInputActionValue& Value);
+	void Ability2PressInput(const FInputActionValue& Value);
+	void Ability2HoldInput(const FInputActionValue& Value);
+	void Ability3PressInput(const FInputActionValue& Value);
+	void Ability3HoldInput(const FInputActionValue& Value);
+	void Ability4PressInput(const FInputActionValue& Value);
+	void Ability4HoldInput(const FInputActionValue& Value);
 	
 	UPROPERTY()
 	UPlayMontageCallbackProxy* ProxyReloadPlayMontage;
@@ -217,6 +268,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ABaseSpectatorPawn> ShooterSpectatorPawnClass;
-
-
+	
 };
+
+

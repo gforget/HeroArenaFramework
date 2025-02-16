@@ -27,9 +27,7 @@ public:
 
 	// Look Up functionality
 	void LookUp(float AxisValue);
-
-	virtual void PullTrigger() override;
-	virtual void ReleaseTrigger() override;
+	
 	virtual void Reload() override;
 	
 	// Called to bind functionality to input
@@ -47,30 +45,6 @@ public:
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	
 protected:
-	
-	//Pull Trigger RPC
-	// Server RPC - executed on the server
-	UFUNCTION(Server, Reliable, WithValidation)
-	void ServerPullTrigger();
-
-	// Multicast RPC - executed on all clients
-	UFUNCTION(NetMulticast, Reliable)
-	void MulticastPullTrigger();
-
-	// Function to perform the actual shooting logic
-	void PerformPullTrigger();
-
-	//Release Trigger RPC
-	// Server RPC - executed on the server
-	UFUNCTION(Server, Reliable, WithValidation)
-	void ServerReleaseTrigger();
-
-	// Multicast RPC - executed on all clients
-	UFUNCTION(NetMulticast, Reliable)
-	void MulticastReleaseTrigger();
-
-	// Function to perform the actual shooting logic
-	void PerformReleaseTrigger();
 
 	//Reload Trigger RPC
 	// Server RPC - executed on the server
