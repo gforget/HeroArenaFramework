@@ -8,6 +8,9 @@
 #include "InputActionValue.h"
 #include "BaseHeroCharacter.generated.h"
 
+class UInputMappingContext;
+class UInputAction;
+class UBaseHeroAbility;
 class ABaseSpectatorPawn;
 class ABaseGun;
 class USphereComponent;
@@ -97,69 +100,74 @@ public:
 	virtual void Reload();
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputMappingContext* DefaultMappingContext;
+	UInputMappingContext* DefaultMappingContext;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* MoveAction;
+	UInputAction* MoveAction;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* LookAction;
+	UInputAction* LookAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* LookRateAction;
+	UInputAction* LookRateAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* JumpAction;
+	UInputAction* JumpAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* GoUpAction;
+	UInputAction* GoUpAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* GoDownAction;
+	UInputAction* GoDownAction;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* ReloadAction;
+	UInputAction* ReloadAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* UltimateAction;
+	UInputAction* UltimateAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* QuickMeleeAttackAction;
+	UInputAction* QuickMeleeAttackAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* ShiftAbilityPressAction;
+	UInputAction* ShiftAbilityPressAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* ShiftAbilityHoldAction;
+	UInputAction* ShiftAbilityHoldAction;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* JumpAbilityAction;
+	UInputAction* JumpAbilityAction;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* Ability1PressAction;
+	UInputAction* Ability1PressAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* Ability1HoldAction;
+	UInputAction* Ability1HoldAction;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* Ability2PressAction;
+	UInputAction* Ability2PressAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* Ability2HoldAction;
+	UInputAction* Ability2HoldAction;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* Ability3PressAction;
+	UInputAction* Ability3PressAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* Ability3HoldAction;
+	UInputAction* Ability3HoldAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* Ability4PressAction;
+	UInputAction* Ability4PressAction;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	class UInputAction* Ability4HoldAction;
+	UInputAction* Ability4HoldAction;
+
+	UPROPERTY()
+	UBaseHeroAbility* Ability1;
 	
 protected:
+	UPROPERTY(EditAnywhere, Category = "Ability")
+	TSubclassOf<UBaseHeroAbility> Ability1Class;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Stimuli")
 	TSubclassOf<AVisualStimuli_ShooterCharacter> VisualStimuli_ShooterCharacterClass;

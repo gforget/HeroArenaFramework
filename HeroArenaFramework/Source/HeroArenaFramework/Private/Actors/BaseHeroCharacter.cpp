@@ -4,6 +4,7 @@
 #include "Actors/BaseHeroCharacter.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "ActorComponents/BaseHeroAbility.h"
 #include "Actors/BaseGun.h"
 #include "Actors/BaseSpectatorPawn.h"
 #include "Actors/RotationViewPointRef.h"
@@ -114,6 +115,13 @@ void ABaseHeroCharacter::BeginPlay()
 	// Set initial collision sphere size
 	HeadCollision->SetSphereRadius(HeadshotRadius-5.0f);
 	UpdateHeadCollision();
+
+	//Instantiate Ability1
+	if (Ability1Class)
+	{
+		Ability1 = NewObject<UBaseHeroAbility>(this, Ability1Class);
+		Ability1->RegisterComponent();
+	}
 }
 
 void ABaseHeroCharacter::Tick(float DeltaTime)
@@ -311,6 +319,15 @@ void ABaseHeroCharacter::Ability1PressInput(const FInputActionValue& Value)
 
 void ABaseHeroCharacter::Ability1HoldInput(const FInputActionValue& Value)
 {
+	bool Press = Value.Get<bool>();
+	if (Press)
+	{
+		Ability1->Execute();
+	}
+	else
+	{
+		Ability1->Cancel();
+	}
 }
 
 void ABaseHeroCharacter::Ability2PressInput(const FInputActionValue& Value)
