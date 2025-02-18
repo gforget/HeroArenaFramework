@@ -116,12 +116,8 @@ void ABaseHeroCharacter::BeginPlay()
 	HeadCollision->SetSphereRadius(HeadshotRadius-5.0f);
 	UpdateHeadCollision();
 
-	//Instantiate Ability1
-	if (Ability1Class)
-	{
-		Ability1 = NewObject<UBaseHeroAbility>(this, Ability1Class);
-		Ability1->RegisterComponent();
-	}
+	// Register all ability profile
+	AllProfiles = {AbilityProfile1, AbilityProfile2, AbilityProfile3, AbilityProfile4, AbilityProfile5};
 }
 
 void ABaseHeroCharacter::Tick(float DeltaTime)
@@ -319,15 +315,15 @@ void ABaseHeroCharacter::Ability1PressInput(const FInputActionValue& Value)
 
 void ABaseHeroCharacter::Ability1HoldInput(const FInputActionValue& Value)
 {
-	bool Press = Value.Get<bool>();
-	if (Press)
-	{
-		Ability1->Execute();
-	}
-	else
-	{
-		Ability1->Cancel();
-	}
+	// bool Press = Value.Get<bool>();
+	// if (Press)
+	// {
+	// 	Ability1->Execute();
+	// }
+	// else
+	// {
+	// 	Ability1->Cancel();
+	// }
 }
 
 void ABaseHeroCharacter::Ability2PressInput(const FInputActionValue& Value)

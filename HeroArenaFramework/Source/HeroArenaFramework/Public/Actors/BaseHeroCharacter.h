@@ -22,6 +22,17 @@ class UPlayMontageCallbackProxy;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMP_HealEvent);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDeadEvent, ABaseHeroCharacter*, DeadShooterCharacter);
 
+UENUM(BlueprintType)
+enum class EAbilityEnum : uint8
+{
+	Ability1     UMETA(DisplayName = "Ability 1"),
+	Ability2     UMETA(DisplayName = "Ability 2"),
+	Ability3     UMETA(DisplayName = "Ability 3"),
+	Ability4     UMETA(DisplayName = "Ability 4"),
+	ShiftAbility UMETA(DisplayName = "Shift Ability"),
+	JumpAbility  UMETA(DisplayName = "Jump Ability")
+};
+
 UCLASS(Abstract)
 class HEROARENAFRAMEWORK_API ABaseHeroCharacter : public ACharacter
 {
@@ -161,13 +172,60 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* Ability4HoldAction;
-
-	UPROPERTY()
-	UBaseHeroAbility* Ability1;
+	
+	TArray<TMap<EAbilityEnum, TSubclassOf<UBaseHeroAbility>>> AllProfiles;
 	
 protected:
-	UPROPERTY(EditAnywhere, Category = "Ability")
-	TSubclassOf<UBaseHeroAbility> Ability1Class;
+
+	UPROPERTY(EditAnywhere, Category="Ability")
+	TMap<EAbilityEnum, TSubclassOf<UBaseHeroAbility>> AbilityProfile1 = {
+		{EAbilityEnum::Ability1, nullptr},
+		{EAbilityEnum::Ability2, nullptr},
+		{EAbilityEnum::Ability3, nullptr},
+		{EAbilityEnum::Ability4, nullptr},
+		{EAbilityEnum::ShiftAbility, nullptr},
+		{EAbilityEnum::JumpAbility, nullptr}
+	};
+
+	UPROPERTY(EditAnywhere, Category="Ability")
+	TMap<EAbilityEnum, TSubclassOf<UBaseHeroAbility>> AbilityProfile2 = {
+		{EAbilityEnum::Ability1, nullptr},
+		{EAbilityEnum::Ability2, nullptr},
+		{EAbilityEnum::Ability3, nullptr},
+		{EAbilityEnum::Ability4, nullptr},
+		{EAbilityEnum::ShiftAbility, nullptr},
+		{EAbilityEnum::JumpAbility, nullptr}
+	};
+
+	UPROPERTY(EditAnywhere, Category="Ability")
+	TMap<EAbilityEnum, TSubclassOf<UBaseHeroAbility>> AbilityProfile3 = {
+		{EAbilityEnum::Ability1, nullptr},
+		{EAbilityEnum::Ability2, nullptr},
+		{EAbilityEnum::Ability3, nullptr},
+		{EAbilityEnum::Ability4, nullptr},
+		{EAbilityEnum::ShiftAbility, nullptr},
+		{EAbilityEnum::JumpAbility, nullptr}
+	};
+
+	UPROPERTY(EditAnywhere, Category="Ability")
+	TMap<EAbilityEnum, TSubclassOf<UBaseHeroAbility>> AbilityProfile4 = {
+		{EAbilityEnum::Ability1, nullptr},
+		{EAbilityEnum::Ability2, nullptr},
+		{EAbilityEnum::Ability3, nullptr},
+		{EAbilityEnum::Ability4, nullptr},
+		{EAbilityEnum::ShiftAbility, nullptr},
+		{EAbilityEnum::JumpAbility, nullptr}
+	};
+
+	UPROPERTY(EditAnywhere, Category="Ability")
+	TMap<EAbilityEnum, TSubclassOf<UBaseHeroAbility>> AbilityProfile5 = {
+		{EAbilityEnum::Ability1, nullptr},
+		{EAbilityEnum::Ability2, nullptr},
+		{EAbilityEnum::Ability3, nullptr},
+		{EAbilityEnum::Ability4, nullptr},
+		{EAbilityEnum::ShiftAbility, nullptr},
+		{EAbilityEnum::JumpAbility, nullptr}
+	};
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Stimuli")
 	TSubclassOf<AVisualStimuli_ShooterCharacter> VisualStimuli_ShooterCharacterClass;

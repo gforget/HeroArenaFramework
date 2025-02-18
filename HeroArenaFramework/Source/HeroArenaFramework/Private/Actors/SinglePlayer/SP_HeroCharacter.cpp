@@ -58,7 +58,7 @@ float ASP_HeroCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 	
 	float DamageToApply =  Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	//Health is modified in BaseShooterCharacter::TakeDamage
+	//Health is modified in BaseHeroCharacter::TakeDamage
 	if (Health <= 0.0f)
 	{
 		Death();
