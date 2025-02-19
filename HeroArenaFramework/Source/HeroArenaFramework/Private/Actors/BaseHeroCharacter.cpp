@@ -94,8 +94,8 @@ void ABaseHeroCharacter::BeginPlay()
 
 	VSShooterCharacter = GetWorld()->SpawnActor<AVisualStimuli_ShooterCharacter>(
 		VisualStimuli_ShooterCharacterClass,
-		FVector(0.0f, 0.0f, 0.0f),
-		FRotator(0.0f, 0.0f, 0.0f)
+		FVector::ZeroVector,
+		FRotator::ZeroRotator
 	);
 
 	VSShooterCharacter->SetShooterCharacterRef(this);
@@ -105,19 +105,49 @@ void ABaseHeroCharacter::BeginPlay()
 
 	RotationViewPointRef = GetWorld()->SpawnActor<ARotationViewPointRef>(
 		RotationViewPointRefClass,
-		FVector(0.0f, 0.0f, 0.0f),
-		FRotator(0.0f, 0.0f, 0.0f)
+		FVector::ZeroVector,
+		FRotator::ZeroRotator
 	);
 
 	RotationViewPointRef->SetOwnerController(GetController());
 	RotationViewPointRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform, NAME_None);
 
 	// Set initial collision sphere size
-	HeadCollision->SetSphereRadius(HeadshotRadius-5.0f);
+	HeadCollision->SetSphereRadius(HeadshotRadius - 5.0f);
 	UpdateHeadCollision();
+	
+	// Instantiate ability profiles (AllProfiles)
+	TArray<TMap<EAbilityEnum, TSubclassOf<UBaseHeroAbility>>> AbilityProfiles;
+	AbilityProfiles.Add(AbilityProfile1);
+	AbilityProfiles.Add(AbilityProfile2);
+	AbilityProfiles.Add(AbilityProfile3);
+	AbilityProfiles.Add(AbilityProfile4);
+	AbilityProfiles.Add(AbilityProfile5);
 
-	// Register all ability profile
-	AllProfiles = {AbilityProfile1, AbilityProfile2, AbilityProfile3, AbilityProfile4, AbilityProfile5};
+	AllAbilityProfiles.Empty(); // make sure our array is empty before instantiating
+
+	for (const TMap<EAbilityEnum, TSubclassOf<UBaseHeroAbility>>& Profile : AbilityProfiles)
+	{
+		TMap<EAbilityEnum, UBaseHeroAbility*> InstantiatedProfile;
+		for (const TPair<EAbilityEnum, TSubclassOf<UBaseHeroAbility>>& AbilityPair : Profile)
+		{
+			if (AbilityPair.Value)
+			{
+				// Instantiate the ability with this character as its outer
+				UBaseHeroAbility* AbilityObject = NewObject<UBaseHeroAbility>(this, AbilityPair.Value);
+				if (AbilityObject)
+				{
+					// If it's a component or behaves like one, register it.
+					AddInstanceComponent(AbilityObject);
+					AbilityObject->RegisterComponent();
+					// Optionally, you could also call AbilityObject->InitializeComponent() if needed.
+					
+					InstantiatedProfile.Add(AbilityPair.Key, AbilityObject);
+				}
+			}
+		}
+		AllAbilityProfiles.Add(InstantiatedProfile);
+	}
 }
 
 void ABaseHeroCharacter::Tick(float DeltaTime)
@@ -271,14 +301,6 @@ void ABaseHeroCharacter::JumpInput(const FInputActionValue& Value)
 	}
 }
 
-void ABaseHeroCharacter::JumpAbilityInput(const FInputActionValue& Value)
-{
-	if (GetCharacterMovement()->IsFalling())
-	{
-		
-	}
-}
-
 void ABaseHeroCharacter::GoUpInput(const FInputActionValue& Value)
 {
 	if (GetCharacterMovement()->GetMovementName() == "Flying")
@@ -300,56 +322,6 @@ void ABaseHeroCharacter::UltimateInput(const FInputActionValue& Value)
 void ABaseHeroCharacter::QuickMeleeAttackInput(const FInputActionValue& Value)
 {
 }
-
-void ABaseHeroCharacter::ShiftAbilityPressInput(const FInputActionValue& Value)
-{
-}
-
-void ABaseHeroCharacter::ShiftAbilityHoldInput(const FInputActionValue& Value)
-{
-}
-
-void ABaseHeroCharacter::Ability1PressInput(const FInputActionValue& Value)
-{
-}
-
-void ABaseHeroCharacter::Ability1HoldInput(const FInputActionValue& Value)
-{
-	// bool Press = Value.Get<bool>();
-	// if (Press)
-	// {
-	// 	Ability1->Execute();
-	// }
-	// else
-	// {
-	// 	Ability1->Cancel();
-	// }
-}
-
-void ABaseHeroCharacter::Ability2PressInput(const FInputActionValue& Value)
-{
-}
-
-void ABaseHeroCharacter::Ability2HoldInput(const FInputActionValue& Value)
-{
-}
-
-void ABaseHeroCharacter::Ability3PressInput(const FInputActionValue& Value)
-{
-}
-
-void ABaseHeroCharacter::Ability3HoldInput(const FInputActionValue& Value)
-{
-}
-
-void ABaseHeroCharacter::Ability4PressInput(const FInputActionValue& Value)
-{
-}
-
-void ABaseHeroCharacter::Ability4HoldInput(const FInputActionValue& Value)
-{
-}
-
 
 void ABaseHeroCharacter::ReloadInput(const FInputActionValue& Value)
 {
@@ -373,6 +345,111 @@ void ABaseHeroCharacter::OnReloadAnimationCompleted(FName NotifyName)
 	AmmoReserve -= CurrentReloadAmount;
 	const int LeftOver = Gun->Reload(CurrentReloadAmount);
 	AmmoReserve += LeftOver;
+}
+
+// Helper function for press-type abilities.
+void ABaseHeroCharacter::TriggerAbilityPress(EAbilityEnum AbilityKey, const FInputActionValue& Value)
+{
+	if (AllAbilityProfiles.IsValidIndex(CurrentAbilityProfileIndex))
+	{
+		UBaseHeroAbility* Ability = AllAbilityProfiles[CurrentAbilityProfileIndex].FindRef(AbilityKey);
+		if (Ability)
+		{
+			Ability->Execute();
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("No ability instance found for key %d in Press"), static_cast<int32>(AbilityKey));
+		}
+	}
+}
+
+// Helper function for hold-type abilities.
+void ABaseHeroCharacter::TriggerAbilityHold(EAbilityEnum AbilityKey, const FInputActionValue& Value)
+{
+	if (AllAbilityProfiles.IsValidIndex(CurrentAbilityProfileIndex))
+	{
+		UBaseHeroAbility* Ability = AllAbilityProfiles[CurrentAbilityProfileIndex].FindRef(AbilityKey);
+		if (Ability)
+		{
+			// For hold inputs, the value indicates if it is pressed (true) or released (false).
+			bool bPressed = Value.Get<bool>();
+			if (bPressed)
+			{
+				Ability->Execute();
+			}
+			else
+			{
+				Ability->Cancel();
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("No ability instance found for key %d in Hold"), static_cast<int32>(AbilityKey));
+		}
+	}
+}
+
+// --- Ability 1 ---
+void ABaseHeroCharacter::Ability1PressInput(const FInputActionValue& Value)
+{
+	TriggerAbilityPress(EAbilityEnum::Ability1Press, Value);
+}
+
+void ABaseHeroCharacter::Ability1HoldInput(const FInputActionValue& Value)
+{
+	TriggerAbilityHold(EAbilityEnum::Ability1Hold, Value);
+}
+
+void ABaseHeroCharacter::Ability2PressInput(const FInputActionValue& Value)
+{
+	TriggerAbilityPress(EAbilityEnum::Ability2Press, Value);
+}
+
+void ABaseHeroCharacter::Ability2HoldInput(const FInputActionValue& Value)
+{
+	TriggerAbilityHold(EAbilityEnum::Ability2Hold, Value);
+}
+
+void ABaseHeroCharacter::Ability3PressInput(const FInputActionValue& Value)
+{
+	TriggerAbilityPress(EAbilityEnum::Ability3Press, Value);
+}
+
+void ABaseHeroCharacter::Ability3HoldInput(const FInputActionValue& Value)
+{
+	TriggerAbilityHold(EAbilityEnum::Ability3Hold, Value);
+}
+
+void ABaseHeroCharacter::Ability4PressInput(const FInputActionValue& Value)
+{
+	TriggerAbilityPress(EAbilityEnum::Ability4Press, Value);
+}
+
+void ABaseHeroCharacter::Ability4HoldInput(const FInputActionValue& Value)
+{
+	TriggerAbilityHold(EAbilityEnum::Ability4Hold, Value);
+}
+
+void ABaseHeroCharacter::ShiftAbilityPressInput(const FInputActionValue& Value)
+{
+	TriggerAbilityPress(EAbilityEnum::ShiftAbilityPress, Value);
+}
+
+void ABaseHeroCharacter::ShiftAbilityHoldInput(const FInputActionValue& Value)
+{
+	TriggerAbilityHold(EAbilityEnum::ShiftAbilityHold, Value);
+}
+
+
+void ABaseHeroCharacter::JumpAbilityInput(const FInputActionValue& Value)
+{
+	// Only allow jump ability when in air.
+	if (!GetCharacterMovement()->IsFalling())
+	{
+		return;
+	}
+	TriggerAbilityPress(EAbilityEnum::JumpAbility, Value);
 }
 
 void ABaseHeroCharacter::Death()
