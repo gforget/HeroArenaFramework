@@ -31,7 +31,7 @@ void ASP_Gun::Fire()
 		return;	
 	}
 	
-	if (UseAmmo())
+	if (CharacterOwner->UseAmmoMagazine())
 	{
 		if (CharacterOwner->GetIsReloading()) return;
 		UParticleSystemComponent* MuzzleFlashParticle = UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));

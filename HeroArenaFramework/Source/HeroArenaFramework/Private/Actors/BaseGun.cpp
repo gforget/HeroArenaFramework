@@ -23,7 +23,6 @@ ABaseGun::ABaseGun()
 void ABaseGun::BeginPlay()
 {
 	Super::BeginPlay();
-	Ammo = MaxAmmo;
 	CurrentBulletSpreadRadius = BaseBulletSpreadRadius;
 }
 
@@ -33,7 +32,7 @@ void ABaseGun::Fire()
 	{
 		bool bIsReloading = ShooterCharacter->GetIsReloading();
 		// Check if spread update timer is not active and restart it
-		if (!GetWorld()->GetTimerManager().IsTimerActive(SpreadUpdateHandle) && !bIsReloading && Ammo > 0)
+		if (!GetWorld()->GetTimerManager().IsTimerActive(SpreadUpdateHandle) && !bIsReloading && ShooterCharacter->GetAmmoMagazineAmount() > 0)
 		{
 			
 			GetWorld()->GetTimerManager().SetTimer(
@@ -91,7 +90,7 @@ void ABaseGun::UpdateSpread()
 	{
 		bool bIsReloading = ShooterCharacter->GetIsReloading();
 	
-		if (TriggerPulled && Ammo > 0 && !bIsReloading)  // Only increase spread if we have ammo and not reloading
+		if (TriggerPulled && ShooterCharacter->GetAmmoMagazineAmount() > 0 && !bIsReloading)  // Only increase spread if we have ammo and not reloading
 		{
 			CurrentBulletSpreadRadius = FMath::Min(
 				CurrentBulletSpreadRadius + (SpreadIncreaseRate * 0.016f),
@@ -117,57 +116,6 @@ void ABaseGun::UpdateSpread()
 			// Log the current bullet spread radius
 			UE_LOG(LogTemp, Warning, TEXT("Current Bullet Spread Radius: %f"), CurrentBulletSpreadRadius);
 		}
-	}
-}
-
-int ABaseGun::Reload(int AmmoAmount)
-{
-	int LeftOver = 0;
-	
-	if (Ammo + AmmoAmount > MaxAmmo)
-	{
-		LeftOver = (Ammo + AmmoAmount) - MaxAmmo;
-		Ammo += AmmoAmount-LeftOver;
-	}
-	else
-	{
-		Ammo += AmmoAmount;
-	}
-
-	return LeftOver;
-}
-
-FString ABaseGun::GetAmmoRatio() const
-{
-	return FString::FromInt(Ammo) + "/" + FString::FromInt(MaxAmmo); 
-}
-
-float ABaseGun::GetAmmoPercent() const
-{
-	return static_cast<float>(Ammo)/static_cast<float>(MaxAmmo);
-}
-
-int ABaseGun::GetAmmoAmount() const
-{
-	return Ammo;
-}
-
-int ABaseGun::GetMaxAmmo() const
-{
-	return MaxAmmo;
-}
-
-bool ABaseGun::UseAmmo()
-{
-	if (Ammo-1 > 0)
-	{
-		Ammo--;
-		return true;
-	}
-	else
-	{
-		Ammo = 0;
-		return false;
 	}
 }
 

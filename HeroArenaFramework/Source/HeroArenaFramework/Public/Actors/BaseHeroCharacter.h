@@ -98,6 +98,21 @@ public:
 	FString GetAmmoReserveRatio() const;
 
 	UFUNCTION(BlueprintCallable)
+	FString GetAmmoMagazineRatio() const;
+
+	UFUNCTION(BlueprintCallable)
+	float GetAmmoMagazinePercent() const;
+
+	UFUNCTION(BlueprintCallable)
+	int GetAmmoMagazineAmount() const;
+
+	UFUNCTION(BlueprintCallable)
+	int GetMaxAmmoMagazine() const;
+
+	UFUNCTION(BlueprintCallable)
+	bool UseAmmoMagazine();
+	
+	UFUNCTION(BlueprintCallable)
 	float GetHealth() const;
 
 	UFUNCTION(BlueprintCallable)
@@ -179,6 +194,8 @@ public:
 	UInputAction* Ability4HoldAction;
 	
 	TArray<TMap<EAbilityEnum, UBaseHeroAbility*>> AllAbilityProfiles;
+
+	
 	
 protected:
 
@@ -320,7 +337,15 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category="Gun")
 	int AmmoReserve = 20;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Gun")
+	int MaxAmmoMagazine = 10;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Gun")
+	int AmmoMagazine = 10;
 
+	int ReloadMagazine(int AmmoAmount);
+	
 	UPROPERTY(EditDefaultsOnly, Category="Gun")
 	TSubclassOf<ABaseGun> GunClass;
 
@@ -372,5 +397,3 @@ protected:
 	void TriggerAbilityHold(EAbilityEnum AbilityKey, const FInputActionValue& Value);
 	
 };
-
-

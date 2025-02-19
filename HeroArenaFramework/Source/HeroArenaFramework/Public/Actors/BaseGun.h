@@ -33,20 +33,6 @@ public:
 	void PullTrigger();
 	void ReleaseTrigger();
 	
-	int Reload(int AmmoAmount);
-
-	UFUNCTION(BlueprintCallable)
-	FString GetAmmoRatio() const;
-
-	UFUNCTION(BlueprintCallable)
-	float GetAmmoPercent() const;
-
-	UFUNCTION(BlueprintCallable)
-	int GetAmmoAmount() const;
-
-	UFUNCTION(BlueprintCallable)
-	int GetMaxAmmo() const;
-	
 protected:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ASoundStimuli_ShootingSound> SoundStimuli_ShootingSoundClass;
@@ -79,12 +65,6 @@ protected:
 	float Damage = 10.0f;
 
 	UPROPERTY(EditDefaultsOnly)
-	int MaxAmmo = 10;
-
-	UPROPERTY(VisibleAnywhere)
-	int Ammo = 10;
-
-	UPROPERTY(EditDefaultsOnly)
 	float TimeBetweenRound = 0.15f;
 	
 	UPROPERTY(EditDefaultsOnly)
@@ -109,8 +89,6 @@ protected:
 	bool TriggerPulled = false;
 	
 	virtual bool GunTrace(FHitResult& Hit, FVector& ShotDirection)PURE_VIRTUAL(ABaseGun::GunTrace, return false;);
-	
-	bool UseAmmo();
 
 	AController* GetOwnerController() const;
 

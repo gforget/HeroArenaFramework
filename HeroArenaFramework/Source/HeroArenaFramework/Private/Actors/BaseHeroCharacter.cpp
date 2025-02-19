@@ -26,7 +26,7 @@ ABaseHeroCharacter::ABaseHeroCharacter()
 	// Create and setup head collision sphere
 	HeadCollision = CreateDefaultSubobject<USphereComponent>(TEXT("HeadCollision"));
 	HeadCollision->SetupAttachment(GetMesh());
-	HeadCollision->SetCollisionProfileName(TEXT("OverlapAll")); // Adjust profile as needed
+	HeadCollision->SetCollisionProfileName(TEXT("OverlapAll"));
 	HeadCollision->SetGenerateOverlapEvents(true);
 
 	UCharacterMovementComponent* MovementComp = GetCharacterMovement();
@@ -60,8 +60,8 @@ bool ABaseHeroCharacter::GetIsReloading() const
 
 float ABaseHeroCharacter::GetAmmoTotalPercent() const
 {
-	int AmmoTotal = AmmoReserve + GetGunReference()->GetAmmoAmount();
-	int AmmoMaxTotal = MaxAmmoReserve + GetGunReference()->GetMaxAmmo();
+	int AmmoTotal = AmmoReserve + AmmoMagazine;
+	int AmmoMaxTotal = MaxAmmoReserve + MaxAmmoMagazine;
 	
 	return static_cast<float>(AmmoTotal)/static_cast<float>(AmmoMaxTotal);
 }
@@ -69,6 +69,57 @@ float ABaseHeroCharacter::GetAmmoTotalPercent() const
 FString ABaseHeroCharacter::GetAmmoReserveRatio() const
 {
 	return FString::FromInt(AmmoReserve) + "/" + FString::FromInt(MaxAmmoReserve); 
+}
+
+FString ABaseHeroCharacter::GetAmmoMagazineRatio() const
+{
+	return FString::FromInt(AmmoMagazine) + "/" + FString::FromInt(MaxAmmoMagazine); 
+}
+
+float ABaseHeroCharacter::GetAmmoMagazinePercent() const
+{
+	return static_cast<float>(AmmoMagazine)/static_cast<float>(MaxAmmoMagazine);
+}
+
+int ABaseHeroCharacter::GetAmmoMagazineAmount() const
+{
+	return AmmoMagazine;
+}
+
+int ABaseHeroCharacter::GetMaxAmmoMagazine() const
+{
+	return MaxAmmoMagazine;
+}
+
+bool ABaseHeroCharacter::UseAmmoMagazine()
+{
+	if (AmmoMagazine-1 > 0)
+	{
+		AmmoMagazine--;
+		return true;
+	}
+	else
+	{
+		AmmoMagazine = 0;
+		return false;
+	}
+}
+
+int ABaseHeroCharacter::ReloadMagazine(int AmmoAmount)
+{
+	int LeftOver = 0;
+	
+	if (AmmoMagazine + AmmoAmount > MaxAmmoMagazine)
+	{
+		LeftOver = (AmmoMagazine + AmmoAmount) - MaxAmmoMagazine;
+		AmmoMagazine += AmmoAmount-LeftOver;
+	}
+	else
+	{
+		AmmoMagazine += AmmoAmount;
+	}
+
+	return LeftOver;
 }
 
 float ABaseHeroCharacter::GetHealth() const
@@ -85,7 +136,8 @@ void ABaseHeroCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	Health = MaxHealth;
-
+	AmmoMagazine = MaxAmmoMagazine;
+	
 	Gun = GetWorld()->SpawnActor<ABaseGun>(GunClass);
 	// GetMesh()->HideBoneByName(TEXT("weapon_r"), PBO_None);
 	//
@@ -335,7 +387,7 @@ void ABaseHeroCharacter::Reload()
 void ABaseHeroCharacter::OnReloadAnimationCompleted(FName NotifyName)
 {
 	IsReloading = false;
-	int ReloadAmount = Gun->GetMaxAmmo();
+	int ReloadAmount = MaxAmmoMagazine;
 	int CurrentReloadAmount = ReloadAmount;
 	if (AmmoReserve - ReloadAmount < 0)
 	{
@@ -343,7 +395,7 @@ void ABaseHeroCharacter::OnReloadAnimationCompleted(FName NotifyName)
 	}
 	
 	AmmoReserve -= CurrentReloadAmount;
-	const int LeftOver = Gun->Reload(CurrentReloadAmount);
+	const int LeftOver = ReloadMagazine(CurrentReloadAmount);
 	AmmoReserve += LeftOver;
 }
 

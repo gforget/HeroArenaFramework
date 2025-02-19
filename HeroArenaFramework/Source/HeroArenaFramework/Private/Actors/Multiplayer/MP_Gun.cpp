@@ -30,7 +30,7 @@ void AMP_Gun::Fire()
 		return;	
 	}
 	
-	if (UseAmmo())
+	if (CharacterOwner->UseAmmoMagazine())
 	{
 		if (CharacterOwner->GetIsReloading()) return;
 		

@@ -44,7 +44,7 @@ float UBTService_UpdateGunInfo::GetAmmoInGunPercent()
 		return 0.0f;
 	}
 	
-	return AICharacter->GetGunReference()->GetAmmoPercent();
+	return AICharacter->GetAmmoMagazinePercent();
 }
 
 float UBTService_UpdateGunInfo::GetAmmoInTotalPercent()
