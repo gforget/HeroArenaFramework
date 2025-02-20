@@ -1,7 +1,6 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Actors/SinglePlayer/SP_HeroCharacter.h"
-#include "Actors/SinglePlayer/SP_Gun.h"
 #include "GameMode/SinglePlayer/SP_BaseGameMode.h"
 #include "PlayMontageCallbackProxy.h"
 #include "Actors/SinglePlayer/SP_SpectatorPawn.h"

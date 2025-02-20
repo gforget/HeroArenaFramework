@@ -5,7 +5,6 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "ActorComponents/BaseHeroAbility.h"
-#include "Actors/BaseGun.h"
 #include "Actors/BaseSpectatorPawn.h"
 #include "Actors/RotationViewPointRef.h"
 #include "Components/CapsuleComponent.h"
@@ -135,14 +134,9 @@ float ABaseHeroCharacter::GetMaxHealth() const
 void ABaseHeroCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
 	Health = MaxHealth;
 	AmmoMagazine = MaxAmmoMagazine;
-	
-	Gun = GetWorld()->SpawnActor<ABaseGun>(GunClass);
-	// GetMesh()->HideBoneByName(TEXT("weapon_r"), PBO_None);
-	//
-	// Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
-	// Gun->SetOwner(this);
 
 	VSShooterCharacter = GetWorld()->SpawnActor<AVisualStimuli_ShooterCharacter>(
 		VisualStimuli_ShooterCharacterClass,
@@ -167,7 +161,7 @@ void ABaseHeroCharacter::BeginPlay()
 	// Set initial collision sphere size
 	HeadCollision->SetSphereRadius(HeadshotRadius - 5.0f);
 	UpdateHeadCollision();
-	
+
 	// Instantiate ability profiles (AllProfiles)
 	TArray<TMap<EAbilityEnum, TSubclassOf<UBaseHeroAbility>>> AbilityProfiles;
 	AbilityProfiles.Add(AbilityProfile1);
@@ -189,11 +183,9 @@ void ABaseHeroCharacter::BeginPlay()
 				UBaseHeroAbility* AbilityObject = NewObject<UBaseHeroAbility>(this, AbilityPair.Value);
 				if (AbilityObject)
 				{
-					// If it's a component or behaves like one, register it.
 					AddInstanceComponent(AbilityObject);
 					AbilityObject->RegisterComponent();
-					// Optionally, you could also call AbilityObject->InitializeComponent() if needed.
-					
+
 					InstantiatedProfile.Add(AbilityPair.Key, AbilityObject);
 				}
 			}
@@ -263,8 +255,6 @@ void ABaseHeroCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 		if (Ability4PressAction != nullptr) EnhancedInputComponent->BindAction(Ability4PressAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::Ability4PressInput);
 		if (Ability4HoldAction != nullptr) EnhancedInputComponent->BindAction(Ability4HoldAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::Ability4HoldInput);
 	}
-	
-	//GetCharacterMovement()->SetMovementMode(MOVE_Flying);
 }
 
 float ABaseHeroCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
@@ -409,10 +399,6 @@ void ABaseHeroCharacter::TriggerAbilityPress(EAbilityEnum AbilityKey, const FInp
 		{
 			Ability->Execute();
 		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("No ability instance found for key %d in Press"), static_cast<int32>(AbilityKey));
-		}
 	}
 }
 
@@ -434,10 +420,6 @@ void ABaseHeroCharacter::TriggerAbilityHold(EAbilityEnum AbilityKey, const FInpu
 			{
 				Ability->Cancel();
 			}
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("No ability instance found for key %d in Hold"), static_cast<int32>(AbilityKey));
 		}
 	}
 }
@@ -508,6 +490,9 @@ void ABaseHeroCharacter::Death()
 {
 	if (!IsDead())
 	{
+		//TODO: will have to cancel every ability, this is a remnant of the shooter framework
+		Ability1HoldInput(FInputActionValue(false));
+		
 		GetCharacterMovement()->GravityScale = 0.0f; //FOR MULTIPLAYER client for some reason pass through floor when no collision
 		GetCharacterMovement()->Velocity = FVector::Zero();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -637,11 +622,6 @@ float ABaseHeroCharacter::Heal(float HealAmount)
 		OnHealEvent.Broadcast();
 		return (Health+HealAmount) - MaxHealth;
 	}	
-}
-
-ABaseGun* ABaseHeroCharacter::GetGunReference() const
-{
-	return Gun;
 }
 
 void ABaseHeroCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

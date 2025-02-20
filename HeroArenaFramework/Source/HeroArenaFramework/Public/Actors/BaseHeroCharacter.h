@@ -12,7 +12,6 @@ class UInputMappingContext;
 class UInputAction;
 class UBaseHeroAbility;
 class ABaseSpectatorPawn;
-class ABaseGun;
 class USphereComponent;
 class UNavMeshUtility;
 class ARotationViewPointRef;
@@ -75,9 +74,6 @@ public:
 	float GetHealthPercent() const;
 
 	float Heal(float HealAmount);
-
-	UFUNCTION(BlueprintCallable)
-	ABaseGun* GetGunReference() const;
 	
 	UPROPERTY()
 	UNavMeshUtility* NavMeshUtility;
@@ -195,7 +191,26 @@ public:
 	
 	TArray<TMap<EAbilityEnum, UBaseHeroAbility*>> AllAbilityProfiles;
 
-	
+	void MoveInput(const FInputActionValue& Value);
+	void LookInput(const FInputActionValue& Value);
+	void LookRateInput(const FInputActionValue& Value);
+	void JumpInput(const FInputActionValue& Value);
+	void GoUpInput(const FInputActionValue& Value);
+	void GoDownInput(const FInputActionValue& Value);
+	void ReloadInput(const FInputActionValue& Value);
+	void UltimateInput(const FInputActionValue& Value);
+	void QuickMeleeAttackInput(const FInputActionValue& Value);
+	void ShiftAbilityPressInput(const FInputActionValue& Value);
+	void ShiftAbilityHoldInput(const FInputActionValue& Value);
+	void JumpAbilityInput(const FInputActionValue& Value);
+	void Ability1PressInput(const FInputActionValue& Value);
+	void Ability1HoldInput(const FInputActionValue& Value);
+	void Ability2PressInput(const FInputActionValue& Value);
+	void Ability2HoldInput(const FInputActionValue& Value);
+	void Ability3PressInput(const FInputActionValue& Value);
+	void Ability3HoldInput(const FInputActionValue& Value);
+	void Ability4PressInput(const FInputActionValue& Value);
+	void Ability4HoldInput(const FInputActionValue& Value);
 	
 protected:
 
@@ -345,12 +360,6 @@ protected:
 	int AmmoMagazine = 10;
 
 	int ReloadMagazine(int AmmoAmount);
-	
-	UPROPERTY(EditDefaultsOnly, Category="Gun")
-	TSubclassOf<ABaseGun> GunClass;
-
-	UPROPERTY()
-	ABaseGun* Gun;
 
 	UPROPERTY()
 	bool IsReloading = false;
@@ -360,27 +369,6 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 100.0f;
-	
-	void MoveInput(const FInputActionValue& Value);
-	void LookInput(const FInputActionValue& Value);
-	void LookRateInput(const FInputActionValue& Value);
-	void JumpInput(const FInputActionValue& Value);
-	void GoUpInput(const FInputActionValue& Value);
-	void GoDownInput(const FInputActionValue& Value);
-	void ReloadInput(const FInputActionValue& Value);
-	void UltimateInput(const FInputActionValue& Value);
-	void QuickMeleeAttackInput(const FInputActionValue& Value);
-	void ShiftAbilityPressInput(const FInputActionValue& Value);
-	void ShiftAbilityHoldInput(const FInputActionValue& Value);
-	void JumpAbilityInput(const FInputActionValue& Value);
-	void Ability1PressInput(const FInputActionValue& Value);
-	void Ability1HoldInput(const FInputActionValue& Value);
-	void Ability2PressInput(const FInputActionValue& Value);
-	void Ability2HoldInput(const FInputActionValue& Value);
-	void Ability3PressInput(const FInputActionValue& Value);
-	void Ability3HoldInput(const FInputActionValue& Value);
-	void Ability4PressInput(const FInputActionValue& Value);
-	void Ability4HoldInput(const FInputActionValue& Value);
 	
 	UPROPERTY()
 	UPlayMontageCallbackProxy* ProxyReloadPlayMontage;

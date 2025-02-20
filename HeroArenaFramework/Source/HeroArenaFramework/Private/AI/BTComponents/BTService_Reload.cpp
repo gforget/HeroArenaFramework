@@ -4,7 +4,6 @@
 #include "AI/BTComponents/BTService_Reload.h"
 
 #include "AIController.h"
-#include "Actors/BaseGun.h"
 #include "Actors/BaseHeroCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
@@ -27,13 +26,7 @@ void UBTService_Reload::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	{
 		return;
 	}
-
-	const ABaseGun* Gun = Character->GetGunReference();
-	if (Character == nullptr)
-	{
-		return;
-	}
-
+	
 	const ABaseHeroCharacter* EnemyInSight = Cast<ABaseHeroCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName("EnemyInSight")));
 	
 	if (!Character->GetIsReloading()

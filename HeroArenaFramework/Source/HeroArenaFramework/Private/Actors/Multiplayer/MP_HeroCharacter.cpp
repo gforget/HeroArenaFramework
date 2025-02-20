@@ -3,7 +3,6 @@
 #include "Actors/Multiplayer/MP_HeroCharacter.h"
 
 #include "PlayMontageCallbackProxy.h"
-#include "Actors/Multiplayer/MP_Gun.h"
 #include "Components/SphereComponent.h"
 #include "Controllers/Multiplayer/MP_HeroPlayerController.h"
 #include "GameMode/Multiplayer/ShooterGameMode/MP_BaseGameState.h"
