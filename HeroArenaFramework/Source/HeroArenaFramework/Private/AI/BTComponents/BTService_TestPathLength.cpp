@@ -45,8 +45,8 @@ float UBTService_TestPathLength::GetPathLength(UObject* WorldContextObject, cons
 	if (NavSys->ProjectPointToNavigation(Start, StartLocation, FVector(100, 100, 100), NavData)
 		&& NavSys->ProjectPointToNavigation(End, EndLocation, FVector(100, 100, 100), NavData))
 	{
-		float PathLength;
-		if (NavSys->GetPathLength(StartLocation.Location, EndLocation.Location, PathLength, NavData))
+		double PathLength;
+		if (NavSys->GetPathLength(WorldContextObject, StartLocation.Location, EndLocation.Location, PathLength))
 		{
 			return PathLength;
 		}

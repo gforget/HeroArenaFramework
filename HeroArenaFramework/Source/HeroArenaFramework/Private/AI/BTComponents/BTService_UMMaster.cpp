@@ -265,8 +265,8 @@ float UBTService_UMMaster::GetPathLength(const FVector& Start, const FVector& En
 	if (NavSys->ProjectPointToNavigation(Start, StartLocation, FVector(500, 500, 500), NavData)
 		&& NavSys->ProjectPointToNavigation(End, EndLocation, FVector(500, 500, 500), NavData))
 	{
-		float PathLength;
-		if (NavSys->GetPathLength(StartLocation.Location, EndLocation.Location, PathLength, NavData))
+		double PathLength;
+		if (NavSys->GetPathLength(StartLocation.Location, EndLocation.Location, PathLength))
 		{
 			return PathLength;
 		}
