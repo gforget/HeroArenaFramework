@@ -254,6 +254,7 @@ void ABaseHeroCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 		if (Ability3HoldAction != nullptr) EnhancedInputComponent->BindAction(Ability3HoldAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::Ability3HoldInput);
 		if (Ability4PressAction != nullptr) EnhancedInputComponent->BindAction(Ability4PressAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::Ability4PressInput);
 		if (Ability4HoldAction != nullptr) EnhancedInputComponent->BindAction(Ability4HoldAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::Ability4HoldInput);
+		if (JumpAbilityAction != nullptr) EnhancedInputComponent->BindAction(JumpAbilityAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::JumpAbilityInput);
 	}
 }
 
@@ -337,7 +338,8 @@ void ABaseHeroCharacter::LookRateInput(const FInputActionValue& Value)
 
 void ABaseHeroCharacter::JumpInput(const FInputActionValue& Value)
 {
-	if (GetCharacterMovement()->GetMovementName() == "Walking")
+	const FString MovementMode = GetCharacterMovement()->GetMovementName();
+	if (MovementMode == "Walking")
 	{
 		ACharacter::Jump();
 	}
@@ -475,15 +477,14 @@ void ABaseHeroCharacter::ShiftAbilityHoldInput(const FInputActionValue& Value)
 	TriggerAbilityHold(EAbilityEnum::ShiftAbilityHold, Value);
 }
 
-
 void ABaseHeroCharacter::JumpAbilityInput(const FInputActionValue& Value)
 {
 	// Only allow jump ability when in air.
-	if (!GetCharacterMovement()->IsFalling())
+	const FString MovementMode = GetCharacterMovement()->GetMovementName();
+	if (MovementMode == "Falling")
 	{
-		return;
+		TriggerAbilityPress(EAbilityEnum::JumpAbility, Value);
 	}
-	TriggerAbilityPress(EAbilityEnum::JumpAbility, Value);
 }
 
 void ABaseHeroCharacter::Death()
