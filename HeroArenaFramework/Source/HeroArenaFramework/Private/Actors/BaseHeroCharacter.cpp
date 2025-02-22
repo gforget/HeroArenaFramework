@@ -254,6 +254,8 @@ void ABaseHeroCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 		if (Ability3HoldAction != nullptr) EnhancedInputComponent->BindAction(Ability3HoldAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::Ability3HoldInput);
 		if (Ability4PressAction != nullptr) EnhancedInputComponent->BindAction(Ability4PressAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::Ability4PressInput);
 		if (Ability4HoldAction != nullptr) EnhancedInputComponent->BindAction(Ability4HoldAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::Ability4HoldInput);
+		if (ShiftAbilityPressAction != nullptr) EnhancedInputComponent->BindAction(ShiftAbilityPressAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::ShiftAbilityPressInput);
+		if (ShiftAbilityHoldAction != nullptr) EnhancedInputComponent->BindAction(ShiftAbilityHoldAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::ShiftAbilityHoldInput);
 		if (JumpAbilityAction != nullptr) EnhancedInputComponent->BindAction(JumpAbilityAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::JumpAbilityInput);
 	}
 }
