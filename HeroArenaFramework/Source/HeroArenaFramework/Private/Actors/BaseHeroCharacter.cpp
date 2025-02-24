@@ -34,6 +34,9 @@ ABaseHeroCharacter::ABaseHeroCharacter()
 	MovementComp->NavAgentProps.bCanFly = true;
 	MovementComp->NavAgentProps.bCanSwim = false;
 	MovementComp->NavAgentProps.bCanCrouch = false;
+
+	MovementComp->GravityScale = 2.0f;
+	MovementComp->JumpZVelocity = 840.0f;
 }
 
 FVector ABaseHeroCharacter::GetHeadAnchorLocation() const
@@ -215,6 +218,17 @@ void ABaseHeroCharacter::Tick(float DeltaTime)
 			1.0f
 		);
 	}
+
+	if (!GetCharacterMovement()->IsFalling())
+	{
+		CustomJumpCount = 0;
+	}
+
+	if (GetCharacterMovement()->Velocity == FVector::Zero())
+	{
+		
+	}
+	
 }
 
 void ABaseHeroCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -320,8 +334,8 @@ float ABaseHeroCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 void ABaseHeroCharacter::MoveInput(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
-	AddMovementInput(GetActorForwardVector(), MovementVector.Y);
 	AddMovementInput(GetActorRightVector(), MovementVector.X);
+	AddMovementInput(GetActorForwardVector(), MovementVector.Y);
 }
 
 void ABaseHeroCharacter::LookInput(const FInputActionValue& Value)
@@ -343,6 +357,7 @@ void ABaseHeroCharacter::JumpInput(const FInputActionValue& Value)
 	const FString MovementMode = GetCharacterMovement()->GetMovementName();
 	if (MovementMode == "Walking")
 	{
+		CustomJumpCount++;
 		ACharacter::Jump();
 	}
 }
@@ -393,6 +408,11 @@ void ABaseHeroCharacter::OnReloadAnimationCompleted(FName NotifyName)
 	AmmoReserve += LeftOver;
 }
 
+void ABaseHeroCharacter::OnReloadAnimationInterrupted(FName NotifyName)
+{
+ 	IsReloading = false;
+}
+
 // Helper function for press-type abilities.
 void ABaseHeroCharacter::TriggerAbilityPress(EAbilityEnum AbilityKey, const FInputActionValue& Value)
 {
@@ -401,7 +421,7 @@ void ABaseHeroCharacter::TriggerAbilityPress(EAbilityEnum AbilityKey, const FInp
 		UBaseHeroAbility* Ability = AllAbilityProfiles[CurrentAbilityProfileIndex].FindRef(AbilityKey);
 		if (Ability)
 		{
-			Ability->Execute();
+			Ability->StartAbility();
 		}
 	}
 }
@@ -418,11 +438,11 @@ void ABaseHeroCharacter::TriggerAbilityHold(EAbilityEnum AbilityKey, const FInpu
 			bool bPressed = Value.Get<bool>();
 			if (bPressed)
 			{
-				Ability->Execute();
+				Ability->StartAbility();
 			}
 			else
 			{
-				Ability->Cancel();
+				Ability->EndAbility();
 			}
 		}
 	}

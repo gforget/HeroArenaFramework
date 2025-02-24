@@ -113,7 +113,11 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	float GetMaxHealth() const;
-
+	
+	
+	UPROPERTY(BlueprintReadWrite)
+	int CustomJumpCount;
+	
 	AVisualStimuli_ShooterCharacter* GetVSShooterCharacter();
 	
 	ARotationViewPointRef* GetRotationViewPointRef();
@@ -123,6 +127,9 @@ public:
 
 	UFUNCTION()
 	void OnReloadAnimationCompleted(FName NotifyName);
+
+	UFUNCTION()
+	void OnReloadAnimationInterrupted(FName NotifyName);
 	
 	virtual void Reload();
 	

@@ -26,7 +26,12 @@ void UBaseHeroAbility::TickComponent(float DeltaTime, ELevelTick TickType,
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-void UBaseHeroAbility::Execute_Implementation()
+void UBaseHeroAbility::StartAbility_Implementation()
+{
+	
+}
+
+void UBaseHeroAbility::EndAbility_Implementation()
 {
 	
 }

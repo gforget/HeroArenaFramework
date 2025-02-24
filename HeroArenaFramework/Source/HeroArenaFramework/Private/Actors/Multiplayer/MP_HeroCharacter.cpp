@@ -170,7 +170,8 @@ void AMP_HeroCharacter::PerformReload()
 			GetMesh(),
 			ReloadMontage
 		);
-		
+
+		ProxyReloadPlayMontage->OnInterrupted.AddDynamic(this, &ABaseHeroCharacter::OnReloadAnimationInterrupted);
 		ProxyReloadPlayMontage->OnCompleted.AddDynamic(this, &ABaseHeroCharacter::OnReloadAnimationCompleted);
 		IsReloading = true;
 	}

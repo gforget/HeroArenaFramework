@@ -75,6 +75,7 @@ void ASP_HeroCharacter::Reload() //overriden
 			ReloadMontage
 		);
 		
+		ProxyReloadPlayMontage->OnInterrupted.AddDynamic(this, &ABaseHeroCharacter::OnReloadAnimationInterrupted);
 		ProxyReloadPlayMontage->OnCompleted.AddDynamic(this, &ABaseHeroCharacter::OnReloadAnimationCompleted);
 		IsReloading = true;
 	}

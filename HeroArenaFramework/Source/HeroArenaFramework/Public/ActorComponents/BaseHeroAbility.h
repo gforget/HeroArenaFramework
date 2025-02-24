@@ -16,10 +16,15 @@ public:
 	UBaseHeroAbility();
 	
 	UFUNCTION(BlueprintNativeEvent)
-	void Execute();
+	void StartAbility();
 	
-	virtual void Execute_Implementation();
+	virtual void StartAbility_Implementation();
 
+	UFUNCTION(BlueprintNativeEvent)
+	void EndAbility();
+	
+	virtual void EndAbility_Implementation();
+	
 	UFUNCTION(BlueprintNativeEvent)
 	void Cancel();
 	

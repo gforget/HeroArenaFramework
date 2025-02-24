@@ -31,9 +31,9 @@ void USP_HeroAbility_Wraith_ShootRiffle::BeginPlay()
 	CurrentBulletSpreadRadius = BaseBulletSpreadRadius;
 }
 
-void USP_HeroAbility_Wraith_ShootRiffle::Execute_Implementation()
+void USP_HeroAbility_Wraith_ShootRiffle::StartAbility_Implementation()
 {
-	Super::Execute_Implementation();
+	Super::StartAbility_Implementation();
 	if (!TriggerPulled)
 	{
 		if (!GetWorld()->GetTimerManager().IsTimerActive(FireTimerHandle))
@@ -62,9 +62,9 @@ void USP_HeroAbility_Wraith_ShootRiffle::Execute_Implementation()
 	}
 }
 
-void USP_HeroAbility_Wraith_ShootRiffle::Cancel_Implementation()
+void USP_HeroAbility_Wraith_ShootRiffle::EndAbility_Implementation()
 {
-	Super::Cancel_Implementation();
+	Super::EndAbility_Implementation();
 	if (TriggerPulled)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
@@ -97,9 +97,10 @@ void USP_HeroAbility_Wraith_ShootRiffle::Fire()
 		return;	
 	}
 	
+	if (CharacterOwner->GetIsReloading()) return;
+
 	if (CharacterOwner->UseAmmoMagazine())
 	{
-		if (CharacterOwner->GetIsReloading()) return;
 		UParticleSystemComponent* MuzzleFlashParticle = UGameplayStatics::SpawnEmitterAttached(
 			MuzzleFlash, 
 			CharacterOwner->GetMesh(), 

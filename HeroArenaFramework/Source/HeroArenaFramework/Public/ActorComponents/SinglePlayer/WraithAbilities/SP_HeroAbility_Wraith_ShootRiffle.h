@@ -29,8 +29,8 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-	virtual void Execute_Implementation() override;
-	virtual void Cancel_Implementation() override;
+	virtual void StartAbility_Implementation() override;
+	virtual void EndAbility_Implementation() override;
 	
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ASoundStimuli_ShootingSound> SoundStimuli_ShootingSoundClass;
