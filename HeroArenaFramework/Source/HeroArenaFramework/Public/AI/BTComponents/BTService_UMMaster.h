@@ -15,11 +15,10 @@ enum EAIStateEnum
 {
 	Flee = 0,
 	LookForHealthPack = 1,
-	LookForAmmo = 2,
-	EngageEnemy = 3,
-	Explore = 4,
-	Default = 5,
-	Inactive = 6
+	EngageEnemy = 2,
+	Explore = 3,
+	Default = 4,
+	Inactive = 5
 };
 
 UCLASS()
@@ -57,16 +56,6 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Look For Health Pack Properties")
 	float MaxDistanceHealthPack;
-
-	//Look for ammo pack properties
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Look For Ammo Pack Properties")
-	FRuntimeFloatCurve LFAPC_AmmoReservePercentCurve;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Look For Ammo Pack Properties")
-	FRuntimeFloatCurve LFAPC_AmmoPackDistanceCurve;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Look For Ammo Pack Properties")
-	float MaxDistanceAmmoPack;
 	
 	//Engage Properties
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Engage Enemy Properties")
@@ -131,14 +120,9 @@ private:
 	float LookForHealthPackC_HealthPercent();
 	float LookForHealthPackC_HealthPackDistance();
 	
-	//Look for ammo considerations
-	float LookForAmmoPackC_AmmoReservePercent();
-	float LookForAmmoPackC_AmmoPackDistance();
-	
 	//Engage Player considerations
 	float EngageEnemyC_IsLastKnownEnemyLocationIsSet();
 	float EngageEnemyC_TimeSenseAnEnemy();
-	float EngageEnemyC_AmmoInTotalPercent();
 	float EngageEnemyC_HealthPercent();
 	
 	//Explore

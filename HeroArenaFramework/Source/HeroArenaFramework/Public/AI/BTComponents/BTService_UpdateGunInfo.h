@@ -22,8 +22,5 @@ protected:
 private:
 	UPROPERTY()
 	UBehaviorTreeComponent* OwnerCompPtr;
-	
-	float GetAmmoReservePercent();
 	float GetAmmoInGunPercent();
-	float GetAmmoInTotalPercent();
 };

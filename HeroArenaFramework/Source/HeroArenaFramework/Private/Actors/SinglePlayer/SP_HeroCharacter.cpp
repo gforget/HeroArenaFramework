@@ -68,7 +68,7 @@ float ASP_HeroCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 
 void ASP_HeroCharacter::Reload() //overriden
 {	
-	if (!IsReloading && AmmoReserve > 0 && GetAmmoMagazinePercent() < 1.0f )
+	if (!IsReloading && GetAmmoMagazinePercent() < 1.0f )
 	{
 		ProxyReloadPlayMontage = UPlayMontageCallbackProxy::CreateProxyObjectForPlayMontage(
 			GetMesh(),

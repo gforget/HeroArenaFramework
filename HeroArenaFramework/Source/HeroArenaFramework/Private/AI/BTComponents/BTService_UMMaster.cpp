@@ -6,7 +6,6 @@
 #include "AIController.h"
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
-#include "Actors/BaseAmmoPack.h"
 #include "Actors/BaseHealthPack.h"
 #include "Actors/BaseHeroCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -47,7 +46,7 @@ TEnumAsByte<EAIStateEnum> UBTService_UMMaster::ChooseState()
 		}
 	}
 	
-	const int STATE_ARRAY_SIZE = 5;
+	const int STATE_ARRAY_SIZE = 4;
 	float StateScoreArray[STATE_ARRAY_SIZE];
 
 	//Flee
@@ -65,19 +64,11 @@ TEnumAsByte<EAIStateEnum> UBTService_UMMaster::ChooseState()
 		LookForHealthPackC_HealthPackDistance()
 		);
 	
-	//LookForAmmo
-	StateScoreArray[EAIStateEnum::LookForAmmo] = ScoreAggregation(2,
-		1.0f *
-		LookForAmmoPackC_AmmoReservePercent() *
-		LookForAmmoPackC_AmmoPackDistance()
-		);
-	
 	//EngagePlayer
-	StateScoreArray[EAIStateEnum::EngageEnemy] = ScoreAggregation(4,
+	StateScoreArray[EAIStateEnum::EngageEnemy] = ScoreAggregation(3,
 		1.0f *
 		EngageEnemyC_IsLastKnownEnemyLocationIsSet() *
 		EngageEnemyC_TimeSenseAnEnemy() *
-		EngageEnemyC_AmmoInTotalPercent() *
 		EngageEnemyC_HealthPercent()
 		);
 
@@ -177,31 +168,6 @@ float UBTService_UMMaster::LookForHealthPackC_HealthPackDistance()
 	return LFHPC_HealthPercentCurve.GetRichCurveConst()->Eval(CalculatedDistance/MaxDistanceHealthPack);
 }
 
-float UBTService_UMMaster::LookForAmmoPackC_AmmoReservePercent()
-{
-	return LFAPC_AmmoReservePercentCurve.GetRichCurveConst()->Eval(OwnerCompPtr->GetBlackboardComponent()->GetValueAsFloat(FName("AmmoInReservePercent")));
-}
-
- float UBTService_UMMaster::LookForAmmoPackC_AmmoPackDistance()
-{
-	if (OwnerCompPtr->GetAIOwner() == nullptr)
-	{
-		return 0.0f;
-	}
-
-	const ABaseAmmoPack* SelectedAmmoPack = Cast<ABaseAmmoPack>(OwnerCompPtr->GetBlackboardComponent()->GetValueAsObject(FName("SelectedAmmoPack")));
-	
-	if (SelectedAmmoPack == nullptr)
-	{
-		return 0.0f;
-	}
-	
-	const FVector CharLocation = OwnerCompPtr->GetAIOwner()->GetPawn()->GetActorLocation(); 
-	const float CalculatedDistance = FMath::Min(GetPathLength(SelectedAmmoPack->GetActorLocation(),CharLocation), MaxDistanceAmmoPack);
-
-	return LFAPC_AmmoPackDistanceCurve.GetRichCurveConst()->Eval(CalculatedDistance/MaxDistanceAmmoPack);
-}
-
 float UBTService_UMMaster::EngageEnemyC_IsLastKnownEnemyLocationIsSet()
 {
 	const bool bIsSet = OwnerCompPtr->GetBlackboardComponent()->IsVectorValueSet(FName("LastKnownEnemyLocation")) || OwnerCompPtr->GetBlackboardComponent()->IsVectorValueSet(FName("SoundHeardLocation"));
@@ -219,10 +185,6 @@ float UBTService_UMMaster::EngageEnemyC_TimeSenseAnEnemy()
 	return EEC_TimeSenseEnemyCurve.GetRichCurve()->Eval(FMath::Min(TimeMin, EEC_MaxTimeSenseAnEnemy)/EEC_MaxTimeSenseAnEnemy);
 }
 
-float UBTService_UMMaster::EngageEnemyC_AmmoInTotalPercent()
-{
-	return EEC_AmmoInTotalPercentCurve.GetRichCurveConst()->Eval(OwnerCompPtr->GetBlackboardComponent()->GetValueAsFloat(FName("AmmoInTotalPercent")));
-}
 
 float UBTService_UMMaster::EngageEnemyC_HealthPercent()
 {

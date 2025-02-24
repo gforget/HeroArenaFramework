@@ -164,7 +164,7 @@ void AMP_HeroCharacter::MulticastReload_Implementation()
 
 void AMP_HeroCharacter::PerformReload()
 {
-	if (!IsReloading && AmmoReserve > 0 && GetAmmoMagazinePercent() < 1.0f )
+	if (!IsReloading && GetAmmoMagazinePercent() < 1.0f )
 	{
 		ProxyReloadPlayMontage = UPlayMontageCallbackProxy::CreateProxyObjectForPlayMontage(
 			GetMesh(),

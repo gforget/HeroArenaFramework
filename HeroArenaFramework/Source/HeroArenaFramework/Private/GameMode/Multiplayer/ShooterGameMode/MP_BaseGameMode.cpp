@@ -2,7 +2,6 @@
 
 
 #include "GameMode/Multiplayer/ShooterGameMode/MP_BaseGameMode.h"
-#include "Actors/Multiplayer/MP_AmmoPack.h"
 #include "Actors/Multiplayer/MP_SpawningPoint.h"
 #include "Actors/Multiplayer/MP_HeroCharacter.h"
 #include "GameMode/MainGameInstance.h"
@@ -82,16 +81,6 @@ TArray<ABaseWaypoint*> AMP_BaseGameMode::GetAllWayPoints()
 void AMP_BaseGameMode::AddWayPoint(ABaseWaypoint* Waypoint)
 {
 	AllWayPoints.Add(Waypoint);
-}
-
-TArray<ABaseAmmoPack*> AMP_BaseGameMode::GetAllAmmoPacks()
-{
-	return AllAmmoPacks;
-}
-
-void AMP_BaseGameMode::AddAmmoPack(ABaseAmmoPack* AmmoPack)
-{
-	AllAmmoPacks.Add(AmmoPack);
 }
 
 TArray<ABaseHealthPack*> AMP_BaseGameMode::GetAllHealthPacks()

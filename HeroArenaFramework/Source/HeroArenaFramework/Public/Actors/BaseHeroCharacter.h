@@ -46,11 +46,6 @@ public:
 	
 	// Sets default values for this character's properties
 	ABaseHeroCharacter();
-
-	UFUNCTION(BlueprintCallable)
-	float GetAmmoReservePercent() const;
-
-	int AddAmmoReserve(int AmmoAmount);
 	
 	UPROPERTY(EditDefaultsOnly, Category="Position Reference")
 	FVector HealthBarAnchor = FVector(0.0f, 0.0f, 88.0f);
@@ -86,13 +81,7 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	bool GetIsReloading() const;
-
-	UFUNCTION(BlueprintCallable)
-	float GetAmmoTotalPercent() const;
-
-	UFUNCTION(BlueprintCallable)
-	FString GetAmmoReserveRatio() const;
-
+	
 	UFUNCTION(BlueprintCallable)
 	FString GetAmmoMagazineRatio() const;
 
@@ -352,20 +341,13 @@ protected:
 
 	UPROPERTY(Replicated, VisibleAnywhere, Category="Combat")
 	float Health = 10.0f;
-
-	UPROPERTY(EditDefaultsOnly, Category="Gun")
-	int MaxAmmoReserve = 100;
-
-	UPROPERTY(EditDefaultsOnly, Category="Gun")
-	int AmmoReserve = 20;
 	
 	UPROPERTY(EditDefaultsOnly, Category="Gun")
 	int MaxAmmoMagazine = 10;
 	
 	UPROPERTY(EditDefaultsOnly, Category="Gun")
 	int AmmoMagazine = 10;
-
-	int ReloadMagazine(int AmmoAmount);
+	
 
 	UPROPERTY()
 	bool IsReloading = false;

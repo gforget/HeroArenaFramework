@@ -9,7 +9,6 @@
 
 class ABaseSpawningPoint;
 class ABaseHealthPack;
-class ABaseAmmoPack;
 class ABaseWaypoint;
 class UTeamManager;
 class ABaseHeroCharacter;
@@ -28,9 +27,6 @@ public:
 	
 	TArray<ABaseWaypoint*> GetAllWayPoints();
 	void AddWayPoint(ABaseWaypoint* WayPoint);
-	
-	TArray<ABaseAmmoPack*> GetAllAmmoPacks();
-	void AddAmmoPack(ABaseAmmoPack* AmmoPack);
 
 	TArray<ABaseHealthPack*> GetAllHealthPacks();
 	void AddHealthPack(ABaseHealthPack* HealthPack);
@@ -58,9 +54,6 @@ protected:
 	
 	UPROPERTY()
 	TArray<ABaseWaypoint*> AllWayPoints;
-	
-	UPROPERTY()
-	TArray<ABaseAmmoPack*> AllAmmoPacks;
 	
 	UPROPERTY()
 	TArray<ABaseHealthPack*> AllHealthPacks;

@@ -60,19 +60,6 @@ bool ABaseHeroCharacter::GetIsReloading() const
 	return IsReloading;
 }
 
-float ABaseHeroCharacter::GetAmmoTotalPercent() const
-{
-	int AmmoTotal = AmmoReserve + AmmoMagazine;
-	int AmmoMaxTotal = MaxAmmoReserve + MaxAmmoMagazine;
-	
-	return static_cast<float>(AmmoTotal)/static_cast<float>(AmmoMaxTotal);
-}
-
-FString ABaseHeroCharacter::GetAmmoReserveRatio() const
-{
-	return FString::FromInt(AmmoReserve) + "/" + FString::FromInt(MaxAmmoReserve); 
-}
-
 FString ABaseHeroCharacter::GetAmmoMagazineRatio() const
 {
 	return FString::FromInt(AmmoMagazine) + "/" + FString::FromInt(MaxAmmoMagazine); 
@@ -107,22 +94,6 @@ bool ABaseHeroCharacter::UseAmmoMagazine()
 	}
 }
 
-int ABaseHeroCharacter::ReloadMagazine(int AmmoAmount)
-{
-	int LeftOver = 0;
-	
-	if (AmmoMagazine + AmmoAmount > MaxAmmoMagazine)
-	{
-		LeftOver = (AmmoMagazine + AmmoAmount) - MaxAmmoMagazine;
-		AmmoMagazine += AmmoAmount-LeftOver;
-	}
-	else
-	{
-		AmmoMagazine += AmmoAmount;
-	}
-
-	return LeftOver;
-}
 
 float ABaseHeroCharacter::GetHealth() const
 {
@@ -396,16 +367,7 @@ void ABaseHeroCharacter::Reload()
 void ABaseHeroCharacter::OnReloadAnimationCompleted(FName NotifyName)
 {
 	IsReloading = false;
-	int ReloadAmount = MaxAmmoMagazine;
-	int CurrentReloadAmount = ReloadAmount;
-	if (AmmoReserve - ReloadAmount < 0)
-	{
-		CurrentReloadAmount = ReloadAmount - FMath::Abs(AmmoReserve-ReloadAmount);
-	}
-	
-	AmmoReserve -= CurrentReloadAmount;
-	const int LeftOver = ReloadMagazine(CurrentReloadAmount);
-	AmmoReserve += LeftOver;
+	AmmoMagazine = MaxAmmoMagazine;
 }
 
 void ABaseHeroCharacter::OnReloadAnimationInterrupted(FName NotifyName)
@@ -600,25 +562,6 @@ void ABaseHeroCharacter::UpdateHeadCollision()
 	// Update collision sphere location to match anchor point
 	FVector NewLocation = GetHeadAnchorLocation();
 	HeadCollision->SetWorldLocation(NewLocation);	
-}
-
-float ABaseHeroCharacter::GetAmmoReservePercent() const
-{
-	return static_cast<float>(AmmoReserve)/static_cast<float>(MaxAmmoReserve);
-}
-
-int ABaseHeroCharacter::AddAmmoReserve(int AmmoAmount)
-{
-	if (AmmoReserve+AmmoAmount <= MaxAmmoReserve)
-	{
-		AmmoReserve += AmmoAmount;
-		return AmmoAmount;
-	}
-	else
-	{
-		AmmoReserve = MaxAmmoReserve;
-		return (AmmoReserve+AmmoAmount) - MaxAmmoReserve;
-	}
 }
 
 ETeam ABaseHeroCharacter::GetTeam() const
