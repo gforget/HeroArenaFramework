@@ -114,7 +114,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetMaxHealth() const;
 	
-	
 	UPROPERTY(BlueprintReadWrite)
 	int CustomJumpCount;
 	
