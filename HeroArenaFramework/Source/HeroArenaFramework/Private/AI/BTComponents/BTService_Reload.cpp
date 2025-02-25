@@ -30,7 +30,7 @@ void UBTService_Reload::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	const ABaseHeroCharacter* EnemyInSight = Cast<ABaseHeroCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName("EnemyInSight")));
 	
 	if (!Character->GetIsReloading()
-		&& (Character->GetAmmoMagazinePercent() == 0.0f || (EnemyInSight == nullptr && Character->GetAmmoMagazinePercent() < 1.0f)))
+		&& (Character->GetLowestAmmoPercent() == 0.0f || (EnemyInSight == nullptr && Character->GetLowestAmmoPercent() < 1.0f)))
 	{
 		Character->Reload();
 	}

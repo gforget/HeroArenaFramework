@@ -78,7 +78,7 @@ void USP_HeroAbility_Wraith_ShootRiffle::Fire()
 	{
 		bool bIsReloading = ShooterCharacter->GetIsReloading();
 		// Check if spread update timer is not active and restart it
-		if (!GetWorld()->GetTimerManager().IsTimerActive(SpreadUpdateHandle) && !bIsReloading && ShooterCharacter->GetAmmoMagazineAmount() > 0)
+		if (!GetWorld()->GetTimerManager().IsTimerActive(SpreadUpdateHandle) && !bIsReloading && GetAmmoAmount() > 0)
 		{
 			
 			GetWorld()->GetTimerManager().SetTimer(
@@ -99,7 +99,7 @@ void USP_HeroAbility_Wraith_ShootRiffle::Fire()
 	
 	if (CharacterOwner->GetIsReloading()) return;
 
-	if (CharacterOwner->UseAmmoMagazine())
+	if (UseAmmo())
 	{
 		UParticleSystemComponent* MuzzleFlashParticle = UGameplayStatics::SpawnEmitterAttached(
 			MuzzleFlash, 
@@ -197,7 +197,7 @@ void USP_HeroAbility_Wraith_ShootRiffle::UpdateSpread()
 	{
 		bool bIsReloading = ShooterCharacter->GetIsReloading();
 	
-		if (TriggerPulled && ShooterCharacter->GetAmmoMagazineAmount() > 0 && !bIsReloading)  // Only increase spread if we have ammo and not reloading
+		if (TriggerPulled && GetAmmoAmount() > 0 && !bIsReloading)  // Only increase spread if we have ammo and not reloading
 		{
 			CurrentBulletSpreadRadius = FMath::Min(
 				CurrentBulletSpreadRadius + (SpreadIncreaseRate * 0.016f),

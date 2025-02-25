@@ -60,40 +60,39 @@ bool ABaseHeroCharacter::GetIsReloading() const
 	return IsReloading;
 }
 
-FString ABaseHeroCharacter::GetAmmoMagazineRatio() const
-{
-	return FString::FromInt(AmmoMagazine) + "/" + FString::FromInt(MaxAmmoMagazine); 
-}
-
-float ABaseHeroCharacter::GetAmmoMagazinePercent() const
-{
-	return static_cast<float>(AmmoMagazine)/static_cast<float>(MaxAmmoMagazine);
-}
-
-int ABaseHeroCharacter::GetAmmoMagazineAmount() const
-{
-	return AmmoMagazine;
-}
-
-int ABaseHeroCharacter::GetMaxAmmoMagazine() const
-{
-	return MaxAmmoMagazine;
-}
-
-bool ABaseHeroCharacter::UseAmmoMagazine()
-{
-	if (AmmoMagazine-1 > 0)
-	{
-		AmmoMagazine--;
-		return true;
-	}
-	else
-	{
-		AmmoMagazine = 0;
-		return false;
-	}
-}
-
+// FString ABaseHeroCharacter::GetAmmoMagazineRatio() const
+// {
+// 	return FString::FromInt(AmmoMagazine) + "/" + FString::FromInt(MaxAmmoMagazine); 
+// }
+//
+// float ABaseHeroCharacter::GetAmmoMagazinePercent() const
+// {
+// 	return static_cast<float>(AmmoMagazine)/static_cast<float>(MaxAmmoMagazine);
+// }
+//
+// int ABaseHeroCharacter::GetAmmoMagazineAmount() const
+// {
+// 	return AmmoMagazine;
+// }
+//
+// int ABaseHeroCharacter::GetMaxAmmoMagazine() const
+// {
+// 	return MaxAmmoMagazine;
+// }
+//
+// bool ABaseHeroCharacter::UseAmmoMagazine()
+// {
+// 	if (AmmoMagazine-1 > 0)
+// 	{
+// 		AmmoMagazine--;
+// 		return true;
+// 	}
+// 	else
+// 	{
+// 		AmmoMagazine = 0;
+// 		return false;
+// 	}
+// }
 
 float ABaseHeroCharacter::GetHealth() const
 {
@@ -110,7 +109,6 @@ void ABaseHeroCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	Health = MaxHealth;
-	AmmoMagazine = MaxAmmoMagazine;
 
 	VSShooterCharacter = GetWorld()->SpawnActor<AVisualStimuli_ShooterCharacter>(
 		VisualStimuli_ShooterCharacterClass,
@@ -161,6 +159,11 @@ void ABaseHeroCharacter::BeginPlay()
 					AbilityObject->RegisterComponent();
 
 					InstantiatedProfile.Add(AbilityPair.Key, AbilityObject);
+
+					if (AbilityObject->GetMaxAmmo() > 0)
+					{
+						AllAmmoAbilities.Add(AbilityObject);
+					}
 				}
 			}
 		}
@@ -193,11 +196,6 @@ void ABaseHeroCharacter::Tick(float DeltaTime)
 	if (!GetCharacterMovement()->IsFalling())
 	{
 		CustomJumpCount = 0;
-	}
-
-	if (GetCharacterMovement()->Velocity == FVector::Zero())
-	{
-		
 	}
 	
 }
@@ -302,6 +300,11 @@ float ABaseHeroCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 	return DamageToApply;
 }
 
+UBaseHeroAbility* ABaseHeroCharacter::GetHeroAbility(int ProfileIndex, EAbilityEnum AbilityEnum)
+{
+	return AllAbilityProfiles[ProfileIndex][AbilityEnum];
+}
+
 void ABaseHeroCharacter::MoveInput(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
@@ -367,12 +370,29 @@ void ABaseHeroCharacter::Reload()
 void ABaseHeroCharacter::OnReloadAnimationCompleted(FName NotifyName)
 {
 	IsReloading = false;
-	AmmoMagazine = MaxAmmoMagazine;
+	for (int i=0; i<AllAmmoAbilities.Num(); i++)
+	{
+		AllAmmoAbilities[i]->ReloadAmmo();
+	}
 }
 
 void ABaseHeroCharacter::OnReloadAnimationInterrupted(FName NotifyName)
 {
  	IsReloading = false;
+}
+
+float ABaseHeroCharacter::GetLowestAmmoPercent()
+{
+	float lowestPercent = 1.0f;
+	for (int32 i=0; i<AllAmmoAbilities.Num(); i++)
+	{
+		if (AllAmmoAbilities[i]->GetAmmoPercent() < lowestPercent)
+		{
+			lowestPercent = AllAmmoAbilities[i]->GetAmmoPercent();
+		}
+	}
+
+	return lowestPercent;
 }
 
 // Helper function for press-type abilities.

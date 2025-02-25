@@ -30,10 +30,34 @@ public:
 	
 	virtual void Cancel_Implementation();
 
+	UFUNCTION(BlueprintCallable, Category="Ammo")
+	FString GetAmmoRatio() const;
+
+	UFUNCTION(BlueprintCallable, Category="Ammo")
+	float GetAmmoPercent() const;
+
+	UFUNCTION(BlueprintCallable, Category="Ammo")
+	int GetAmmoAmount() const;
+
+	UFUNCTION(BlueprintCallable, Category="Ammo")
+	int GetMaxAmmo() const;
+
+	UFUNCTION(BlueprintCallable, Category="Ammo")
+	bool UseAmmo();
+
+	UFUNCTION(BlueprintCallable, Category="Ammo")
+	void ReloadAmmo();
+	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditDefaultsOnly, Category="Ammo")
+	int MaxAmmo = 0;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Ammo")
+	int Ammo = 0;
+	
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

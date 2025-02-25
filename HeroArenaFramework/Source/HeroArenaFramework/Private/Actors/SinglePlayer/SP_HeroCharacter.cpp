@@ -3,6 +3,7 @@
 #include "Actors/SinglePlayer/SP_HeroCharacter.h"
 #include "GameMode/SinglePlayer/SP_BaseGameMode.h"
 #include "PlayMontageCallbackProxy.h"
+#include "ActorComponents/BaseHeroAbility.h"
 #include "Actors/SinglePlayer/SP_SpectatorPawn.h"
 #include "Controllers/SinglePlayer/SP_HeroPlayerController.h"
 #include "Kismet/GameplayStatics.h"
@@ -67,21 +68,31 @@ float ASP_HeroCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 }
 
 void ASP_HeroCharacter::Reload() //overriden
-{	
-	if (!IsReloading && GetAmmoMagazinePercent() < 1.0f )
+{
+	if (!IsReloading)
 	{
-		ProxyReloadPlayMontage = UPlayMontageCallbackProxy::CreateProxyObjectForPlayMontage(
-			GetMesh(),
-			ReloadMontage
-		);
+		bool bNeedReloading = false;
+		for (int32 i = 0; i < AllAmmoAbilities.Num(); i++)
+		{
+			bNeedReloading = AllAmmoAbilities[i]->GetAmmoPercent() < 1.0f;
+			if (bNeedReloading) break;
+		}
+
+		if (bNeedReloading)
+		{
+			ProxyReloadPlayMontage = UPlayMontageCallbackProxy::CreateProxyObjectForPlayMontage(
+				GetMesh(),
+				ReloadMontage
+			);
 		
-		ProxyReloadPlayMontage->OnInterrupted.AddDynamic(this, &ABaseHeroCharacter::OnReloadAnimationInterrupted);
-		ProxyReloadPlayMontage->OnCompleted.AddDynamic(this, &ABaseHeroCharacter::OnReloadAnimationCompleted);
-		IsReloading = true;
-	}
-	else
-	{
-		//TODO: clip sound
+			ProxyReloadPlayMontage->OnInterrupted.AddDynamic(this, &ABaseHeroCharacter::OnReloadAnimationInterrupted);
+			ProxyReloadPlayMontage->OnCompleted.AddDynamic(this, &ABaseHeroCharacter::OnReloadAnimationCompleted);
+			IsReloading = true;
+		}
+		else
+		{
+			//TODO: clip sound
+		}
 	}
 }
 

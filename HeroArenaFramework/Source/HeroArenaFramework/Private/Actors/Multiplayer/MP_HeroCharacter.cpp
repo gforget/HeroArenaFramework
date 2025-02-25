@@ -3,6 +3,7 @@
 #include "Actors/Multiplayer/MP_HeroCharacter.h"
 
 #include "PlayMontageCallbackProxy.h"
+#include "ActorComponents/BaseHeroAbility.h"
 #include "Components/SphereComponent.h"
 #include "Controllers/Multiplayer/MP_HeroPlayerController.h"
 #include "GameMode/Multiplayer/ShooterGameMode/MP_BaseGameState.h"
@@ -164,16 +165,29 @@ void AMP_HeroCharacter::MulticastReload_Implementation()
 
 void AMP_HeroCharacter::PerformReload()
 {
-	if (!IsReloading && GetAmmoMagazinePercent() < 1.0f )
+	if (!IsReloading)
 	{
-		ProxyReloadPlayMontage = UPlayMontageCallbackProxy::CreateProxyObjectForPlayMontage(
-			GetMesh(),
-			ReloadMontage
-		);
-
-		ProxyReloadPlayMontage->OnInterrupted.AddDynamic(this, &ABaseHeroCharacter::OnReloadAnimationInterrupted);
-		ProxyReloadPlayMontage->OnCompleted.AddDynamic(this, &ABaseHeroCharacter::OnReloadAnimationCompleted);
-		IsReloading = true;
+		bool bNeedReloading = false;
+		for (int32 i = 0; i < AllAmmoAbilities.Num(); i++)
+		{
+			bNeedReloading = AllAmmoAbilities[i]->GetAmmoPercent() < 1.0f;
+			if (bNeedReloading) break;
+		}
+		if (bNeedReloading)
+		{
+			ProxyReloadPlayMontage = UPlayMontageCallbackProxy::CreateProxyObjectForPlayMontage(
+				GetMesh(),
+				ReloadMontage
+			);
+		
+			ProxyReloadPlayMontage->OnInterrupted.AddDynamic(this, &ABaseHeroCharacter::OnReloadAnimationInterrupted);
+			ProxyReloadPlayMontage->OnCompleted.AddDynamic(this, &ABaseHeroCharacter::OnReloadAnimationCompleted);
+			IsReloading = true;
+		}
+		else
+		{
+			//TODO: clip sound
+		}
 	}
 	else
 	{

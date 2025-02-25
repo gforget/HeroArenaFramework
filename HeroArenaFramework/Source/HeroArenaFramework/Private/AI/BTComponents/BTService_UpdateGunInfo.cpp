@@ -16,20 +16,4 @@ void UBTService_UpdateGunInfo::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 	OwnerCompPtr = &OwnerComp;
-	if (OwnerCompPtr != nullptr)
-	{
-		OwnerCompPtr->GetBlackboardComponent()->SetValueAsFloat(FName("AmmoInGunPercent"), GetAmmoInGunPercent());
-	}
 }
-
-float UBTService_UpdateGunInfo::GetAmmoInGunPercent()
-{
-	const ABaseHeroCharacter* AICharacter = Cast<ABaseHeroCharacter>(OwnerCompPtr->GetAIOwner()->GetPawn());
-	if (AICharacter == nullptr)
-	{
-		return 0.0f;
-	}
-	
-	return AICharacter->GetAmmoMagazinePercent();
-}
-

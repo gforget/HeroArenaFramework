@@ -83,21 +83,6 @@ public:
 	bool GetIsReloading() const;
 	
 	UFUNCTION(BlueprintCallable)
-	FString GetAmmoMagazineRatio() const;
-
-	UFUNCTION(BlueprintCallable)
-	float GetAmmoMagazinePercent() const;
-
-	UFUNCTION(BlueprintCallable)
-	int GetAmmoMagazineAmount() const;
-
-	UFUNCTION(BlueprintCallable)
-	int GetMaxAmmoMagazine() const;
-
-	UFUNCTION(BlueprintCallable)
-	bool UseAmmoMagazine();
-	
-	UFUNCTION(BlueprintCallable)
 	float GetHealth() const;
 
 	UFUNCTION(BlueprintCallable)
@@ -183,6 +168,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* Ability4HoldAction;
+
+	UFUNCTION(BlueprintPure, Category = "Ability")
+	UBaseHeroAbility* GetHeroAbility(int ProfileIndex, EAbilityEnum AbilityEnum);
 	
 	TArray<TMap<EAbilityEnum, UBaseHeroAbility*>> AllAbilityProfiles;
 
@@ -206,9 +194,14 @@ public:
 	void Ability3HoldInput(const FInputActionValue& Value);
 	void Ability4PressInput(const FInputActionValue& Value);
 	void Ability4HoldInput(const FInputActionValue& Value);
+
+	float GetLowestAmmoPercent();
 	
 protected:
 
+	UPROPERTY(EditAnywhere, Category="Ability")
+	TArray<UBaseHeroAbility*> AllAmmoAbilities;
+	
 	UPROPERTY(EditAnywhere, Category="Ability")
 	int32 CurrentAbilityProfileIndex = 0;
 
@@ -341,13 +334,6 @@ protected:
 
 	UPROPERTY(Replicated, VisibleAnywhere, Category="Combat")
 	float Health = 10.0f;
-	
-	UPROPERTY(EditDefaultsOnly, Category="Gun")
-	int MaxAmmoMagazine = 10;
-	
-	UPROPERTY(EditDefaultsOnly, Category="Gun")
-	int AmmoMagazine = 10;
-	
 
 	UPROPERTY()
 	bool IsReloading = false;
@@ -373,3 +359,4 @@ protected:
 	void TriggerAbilityHold(EAbilityEnum AbilityKey, const FInputActionValue& Value);
 	
 };
+
