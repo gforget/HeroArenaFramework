@@ -27,7 +27,7 @@ ABaseHeroCharacter::ABaseHeroCharacter()
 	HeadCollision->SetupAttachment(GetMesh());
 	HeadCollision->SetCollisionProfileName(TEXT("OverlapAll"));
 	HeadCollision->SetGenerateOverlapEvents(true);
-
+	
 	UCharacterMovementComponent* MovementComp = GetCharacterMovement();
 	MovementComp->NavAgentProps.bCanWalk = true;
 	MovementComp->NavAgentProps.bCanJump = true;
@@ -59,40 +59,6 @@ bool ABaseHeroCharacter::GetIsReloading() const
 {
 	return IsReloading;
 }
-
-// FString ABaseHeroCharacter::GetAmmoMagazineRatio() const
-// {
-// 	return FString::FromInt(AmmoMagazine) + "/" + FString::FromInt(MaxAmmoMagazine); 
-// }
-//
-// float ABaseHeroCharacter::GetAmmoMagazinePercent() const
-// {
-// 	return static_cast<float>(AmmoMagazine)/static_cast<float>(MaxAmmoMagazine);
-// }
-//
-// int ABaseHeroCharacter::GetAmmoMagazineAmount() const
-// {
-// 	return AmmoMagazine;
-// }
-//
-// int ABaseHeroCharacter::GetMaxAmmoMagazine() const
-// {
-// 	return MaxAmmoMagazine;
-// }
-//
-// bool ABaseHeroCharacter::UseAmmoMagazine()
-// {
-// 	if (AmmoMagazine-1 > 0)
-// 	{
-// 		AmmoMagazine--;
-// 		return true;
-// 	}
-// 	else
-// 	{
-// 		AmmoMagazine = 0;
-// 		return false;
-// 	}
-// }
 
 float ABaseHeroCharacter::GetHealth() const
 {
@@ -365,6 +331,11 @@ void ABaseHeroCharacter::ReloadInput(const FInputActionValue& Value)
 
 void ABaseHeroCharacter::Reload()
 {
+	// Don't allow reload if there is no ability who uses ammo
+	if (AllAmmoAbilities.IsEmpty())
+	{
+		return;
+	}
 }
 
 void ABaseHeroCharacter::OnReloadAnimationCompleted(FName NotifyName)

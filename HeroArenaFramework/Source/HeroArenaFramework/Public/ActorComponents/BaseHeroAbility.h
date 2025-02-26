@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "BaseHeroAbility.generated.h"
 
+class ABaseHeroCharacter;
+
 UCLASS(ClassGroup=(Custom), BlueprintType, Blueprintable, meta=(BlueprintSpawnableComponent))
 class HEROARENAFRAMEWORK_API UBaseHeroAbility : public UActorComponent
 {
@@ -53,10 +55,9 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditDefaultsOnly, Category="Ammo")
-	int MaxAmmo = 0;
+	int AmmoPoolIndex = -1;
 	
-	UPROPERTY(EditDefaultsOnly, Category="Ammo")
-	int Ammo = 0;
+	ABaseHeroCharacter* GetOwningHeroCharacter() const;
 	
 public:
 	// Called every frame

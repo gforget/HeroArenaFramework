@@ -17,6 +17,7 @@ class UNavMeshUtility;
 class ARotationViewPointRef;
 class AVisualStimuli_ShooterCharacter;
 class UPlayMontageCallbackProxy;
+class UBaseAmmoPools;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMP_HealEvent);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDeadEvent, ABaseHeroCharacter*, DeadShooterCharacter);
@@ -35,6 +36,19 @@ enum class EAbilityEnum : uint8
 	ShiftAbilityPress  UMETA(DisplayName = "Shift Ability Press"),
 	ShiftAbilityHold   UMETA(DisplayName = "Shift Ability Hold"),
 	JumpAbility        UMETA(DisplayName = "Jump Ability")
+};
+
+USTRUCT(BlueprintType)
+struct FAmmoPool
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Ammo = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 MaxAmmo = 0;
 };
 
 UCLASS(Abstract)
@@ -194,8 +208,11 @@ public:
 	void Ability3HoldInput(const FInputActionValue& Value);
 	void Ability4PressInput(const FInputActionValue& Value);
 	void Ability4HoldInput(const FInputActionValue& Value);
-
+	
 	float GetLowestAmmoPercent();
+
+	UPROPERTY(EditDefaultsOnly, Category="Ammo")
+	TArray<FAmmoPool> AmmoPools;
 	
 protected:
 

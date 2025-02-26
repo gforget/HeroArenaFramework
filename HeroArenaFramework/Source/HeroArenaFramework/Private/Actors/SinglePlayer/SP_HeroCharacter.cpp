@@ -69,6 +69,7 @@ float ASP_HeroCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 
 void ASP_HeroCharacter::Reload() //overriden
 {
+	Super::Reload();
 	if (!IsReloading)
 	{
 		bool bNeedReloading = false;

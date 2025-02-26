@@ -138,6 +138,7 @@ void AMP_HeroCharacter::MulticastDeath_Implementation()
 //---- Reload ----/
 void AMP_HeroCharacter::Reload()
 {
+	Super::Reload();
 	if (HasAuthority())
 	{
 		MulticastReload();

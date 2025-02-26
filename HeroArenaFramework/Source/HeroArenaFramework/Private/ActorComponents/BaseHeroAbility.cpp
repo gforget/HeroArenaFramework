@@ -3,6 +3,8 @@
 
 #include "ActorComponents/BaseHeroAbility.h"
 
+#include "Actors/BaseHeroCharacter.h"
+
 
 // Sets default values for this component's properties
 UBaseHeroAbility::UBaseHeroAbility()
@@ -15,10 +17,6 @@ void UBaseHeroAbility::BeginPlay()
 {
 	Super::BeginPlay();
 	SetComponentTickEnabled(false);
-	if (MaxAmmo > 0)
-	{
-		Ammo = MaxAmmo;
-	}
 }
 
 
@@ -44,41 +42,85 @@ void UBaseHeroAbility::Cancel_Implementation()
 	
 }
 
+// Add a helper method to get the owning hero character
+ABaseHeroCharacter* UBaseHeroAbility::GetOwningHeroCharacter() const
+{
+	return Cast<ABaseHeroCharacter>(GetOwner());
+}
+
 FString UBaseHeroAbility::GetAmmoRatio() const
 {
-	return FString::FromInt(Ammo) + "/" + FString::FromInt(MaxAmmo); 
+	ABaseHeroCharacter* OwningHero = GetOwningHeroCharacter();
+	if (AmmoPoolIndex >= 0 && OwningHero && OwningHero->AmmoPools.IsValidIndex(AmmoPoolIndex))
+	{
+		return FString::FromInt(OwningHero->AmmoPools[AmmoPoolIndex].Ammo) + "/" + 
+			   FString::FromInt(OwningHero->AmmoPools[AmmoPoolIndex].MaxAmmo);
+	}
+	
+	return "0/0";
 }
 
 float UBaseHeroAbility::GetAmmoPercent() const
 {
-	return static_cast<float>(Ammo)/static_cast<float>(MaxAmmo);
+	ABaseHeroCharacter* OwningHero = GetOwningHeroCharacter();
+	if (AmmoPoolIndex >= 0 && OwningHero && OwningHero->AmmoPools.IsValidIndex(AmmoPoolIndex))
+	{
+		const FAmmoPool& AmmoPool = OwningHero->AmmoPools[AmmoPoolIndex];
+		return AmmoPool.MaxAmmo > 0 ? static_cast<float>(AmmoPool.Ammo)/static_cast<float>(AmmoPool.MaxAmmo) : 0.0f;
+	}
+	
+	return 0.0f;
 }
 
 int UBaseHeroAbility::GetAmmoAmount() const
 {
-	return Ammo;
+	ABaseHeroCharacter* OwningHero = GetOwningHeroCharacter();
+	if (AmmoPoolIndex >= 0 && OwningHero && OwningHero->AmmoPools.IsValidIndex(AmmoPoolIndex))
+	{
+		return OwningHero->AmmoPools[AmmoPoolIndex].Ammo;
+	}
+	
+	return 0;
 }
 
 int UBaseHeroAbility::GetMaxAmmo() const
 {
-	return MaxAmmo;
+	ABaseHeroCharacter* OwningHero = GetOwningHeroCharacter();
+	if (AmmoPoolIndex >= 0 && OwningHero && OwningHero->AmmoPools.IsValidIndex(AmmoPoolIndex))
+	{
+		return OwningHero->AmmoPools[AmmoPoolIndex].MaxAmmo;
+	}
+	
+	return 0;
 }
 
 bool UBaseHeroAbility::UseAmmo()
 {
-	if (Ammo-1 > 0)
+	ABaseHeroCharacter* OwningHero = GetOwningHeroCharacter();
+	if (AmmoPoolIndex >= 0 && OwningHero && OwningHero->AmmoPools.IsValidIndex(AmmoPoolIndex))
 	{
-		Ammo--;
-		return true;
+		FAmmoPool& AmmoPool = OwningHero->AmmoPools[AmmoPoolIndex];
+		if (AmmoPool.Ammo > 0)
+		{
+			AmmoPool.Ammo--;
+			return true;
+		}
+		else
+		{
+			AmmoPool.Ammo = 0;
+			return false;
+		}
 	}
-	else
-	{
-		Ammo = 0;
-		return false;
-	}
+	
+	return false;
 }
 
 void UBaseHeroAbility::ReloadAmmo()
 {
-	Ammo = MaxAmmo;
+	ABaseHeroCharacter* OwningHero = GetOwningHeroCharacter();
+	if (AmmoPoolIndex >= 0 && OwningHero && OwningHero->AmmoPools.IsValidIndex(AmmoPoolIndex))
+	{
+		FAmmoPool& AmmoPool = OwningHero->AmmoPools[AmmoPoolIndex];
+		AmmoPool.Ammo = AmmoPool.MaxAmmo;
+	}
 }
