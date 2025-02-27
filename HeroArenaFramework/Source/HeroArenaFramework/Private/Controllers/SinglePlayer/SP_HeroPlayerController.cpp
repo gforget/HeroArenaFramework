@@ -24,21 +24,20 @@ void ASP_HeroPlayerController::BeginPlay()
 void ASP_HeroPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-	
-	if (PlayerHUD == nullptr)
-	{
-		PlayerHUD = Cast<UPlayerHUD>(CreateWidget(this, HUDScreenClass));
-		PlayerHUD->AddToViewport();
-	}
-		
 	if (ASP_HeroCharacter* ShooterCharacter = Cast<ASP_HeroCharacter>(InPawn))
 	{
-		PlayerHUD->OnPlayerModeEvent();
+		if (CharacterHUD == nullptr)
+		{
+			CharacterHUD = Cast<UPlayerHUD>(CreateWidget(this, ShooterCharacter->CharacterHUDScreenClass));
+			CharacterHUD->AddToViewport();
+		}
+		
+		CharacterHUD->OnPlayerModeEvent();
 	}
 
 	if (ASP_SpectatorPawn* ShooterSpectator = Cast<ASP_SpectatorPawn>(InPawn))
 	{
-		PlayerHUD->OnSpectatorModeEvent();
+		CharacterHUD->OnSpectatorModeEvent();
 	}
 }
 

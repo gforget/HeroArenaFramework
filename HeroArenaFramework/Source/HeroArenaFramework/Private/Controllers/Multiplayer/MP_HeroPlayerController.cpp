@@ -59,25 +59,25 @@ void AMP_HeroPlayerController::InstantiateHUD(APawn* InPawn)
 
 		if (ShooterCharacter != nullptr || ShooterSpectator != nullptr)
 		{
-			if (PlayerHUD == nullptr)
+			if (CharacterHUD == nullptr)
 			{
-				PlayerHUD = Cast<UPlayerHUD>(CreateWidget(this, HUDScreenClass));
-				if (PlayerHUD != nullptr)
+				CharacterHUD = Cast<UPlayerHUD>(CreateWidget(this, ShooterCharacter->CharacterHUDScreenClass));
+				if (CharacterHUD != nullptr)
 				{
-					PlayerHUD->AddToViewport();
+					CharacterHUD->AddToViewport();
 				}
 			}
 		
-			if (PlayerHUD != nullptr)
+			if (CharacterHUD != nullptr)
 			{
 				if (ShooterCharacter != nullptr)
 				{
 					AssignedShooterCharacter = ShooterCharacter;
-					PlayerHUD->OnPlayerModeEvent();
+					CharacterHUD->OnPlayerModeEvent();
 				}
 				else if (ShooterSpectator != nullptr)
 				{
-					PlayerHUD->OnSpectatorModeEvent();
+					CharacterHUD->OnSpectatorModeEvent();
 				}
 			}
 

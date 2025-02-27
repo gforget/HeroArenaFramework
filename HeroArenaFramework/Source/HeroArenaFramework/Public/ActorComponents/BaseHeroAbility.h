@@ -19,19 +19,19 @@ public:
 	
 	UFUNCTION(BlueprintNativeEvent)
 	void StartAbility();
-	
 	virtual void StartAbility_Implementation();
+	void CallStartAbility();
 
 	UFUNCTION(BlueprintNativeEvent)
 	void EndAbility();
-	
 	virtual void EndAbility_Implementation();
+	void CallEndAbility();
 	
 	UFUNCTION(BlueprintNativeEvent)
-	void Cancel();
+	void CancelAbility();
+	virtual void CancelAbility_Implementation();
+	void CallCancelAbility();
 	
-	virtual void Cancel_Implementation();
-
 	UFUNCTION(BlueprintCallable, Category="Ammo")
 	FString GetAmmoRatio() const;
 
@@ -49,16 +49,62 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Ammo")
 	void ReloadAmmo();
+
+	UFUNCTION(BlueprintCallable, Category="Cooldown")
+	bool IsOnCooldown() const;
+	
+	UFUNCTION(BlueprintCallable, Category="Cooldown")
+	float GetRemainingCooldown() const;
+	
+	UFUNCTION(BlueprintCallable, Category="Cooldown")
+	float GetCooldownPercent() const;
+	
+	UFUNCTION(BlueprintCallable, Category="Cooldown")
+	float GetCooldownScale() const;
+	
+	UFUNCTION(BlueprintCallable, Category="Cooldown")
+	void SetCooldownScale(float NewScale);
+
+	UFUNCTION(BlueprintCallable, Category="Cooldown")
+	void ClearCoolDown();
 	
 protected:
+	
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditDefaultsOnly, Category="Ammo")
+	UFUNCTION(BlueprintCallable, Category="Cooldown")
+	void ActivateCooldown();
+	
+	UPROPERTY(EditDefaultsOnly, Category="General Properties")
 	int AmmoPoolIndex = -1;
 	
-	ABaseHeroCharacter* GetOwningHeroCharacter() const;
+	UPROPERTY(EditDefaultsOnly, Category="General Properties")
+	float Cooldown = 0.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category="General Properties")
+	float CooldownScale = 1.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category="General Properties")
+	int Charges = 0;
+
+	UPROPERTY()
+	bool bIsOnCooldown = false;
+
+	UPROPERTY()
+	float RemainingCooldown = 0.0f;
+
+	UPROPERTY()
+	FTimerHandle CooldownTimerHandle;
+	void ProcessCooldown();
+
+	UPROPERTY()
+	float CooldownTimerRate = 0.1f;
 	
+	ABaseHeroCharacter* GetOwningHeroCharacter() const;
+
+	bool IsAbilityLocked() const;
+
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

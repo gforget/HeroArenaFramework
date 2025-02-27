@@ -18,6 +18,7 @@ class ARotationViewPointRef;
 class AVisualStimuli_ShooterCharacter;
 class UPlayMontageCallbackProxy;
 class UBaseAmmoPools;
+class UPlayerHUD;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMP_HealEvent);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDeadEvent, ABaseHeroCharacter*, DeadShooterCharacter);
@@ -57,6 +58,9 @@ class HEROARENAFRAMEWORK_API ABaseHeroCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UPlayerHUD> CharacterHUDScreenClass;
 	
 	// Sets default values for this character's properties
 	ABaseHeroCharacter();

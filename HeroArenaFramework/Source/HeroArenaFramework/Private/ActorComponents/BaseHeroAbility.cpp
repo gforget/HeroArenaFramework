@@ -12,15 +12,54 @@ UBaseHeroAbility::UBaseHeroAbility()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-// Called when the game starts
 void UBaseHeroAbility::BeginPlay()
 {
 	Super::BeginPlay();
-	SetComponentTickEnabled(false);
+	SetComponentTickEnabled(false);	
 }
 
+void UBaseHeroAbility::ActivateCooldown()
+{
+	if (Cooldown > 0.0f)
+	{
+		bIsOnCooldown = true;
+		RemainingCooldown = Cooldown;
+		
+		if (GetWorld()->GetTimerManager().IsTimerActive(CooldownTimerHandle))
+		{
+			GetWorld()->GetTimerManager().ClearTimer(CooldownTimerHandle);
+		}
+		
+		GetWorld()->GetTimerManager().SetTimer(
+			CooldownTimerHandle,
+			this,
+			&UBaseHeroAbility::ProcessCooldown,
+			CooldownTimerRate,
+			true
+		);
+	}
+}
 
-// Called every frame
+void UBaseHeroAbility::ProcessCooldown()
+{
+	if (bIsOnCooldown)
+	{
+		RemainingCooldown -= CooldownTimerRate * CooldownScale;
+		
+		if (RemainingCooldown <= 0.0f)
+		{
+			ClearCoolDown();
+		}
+	}
+}
+
+void UBaseHeroAbility::ClearCoolDown()
+{
+	bIsOnCooldown = false;
+	RemainingCooldown = 0.0f;
+	GetWorld()->GetTimerManager().ClearTimer(CooldownTimerHandle);
+}
+
 void UBaseHeroAbility::TickComponent(float DeltaTime, ELevelTick TickType,
                                      FActorComponentTickFunction* ThisTickFunction)
 {
@@ -32,20 +71,40 @@ void UBaseHeroAbility::StartAbility_Implementation()
 	
 }
 
+void UBaseHeroAbility::CallStartAbility()
+{
+	if (!IsAbilityLocked()) StartAbility();
+}
+
 void UBaseHeroAbility::EndAbility_Implementation()
 {
 	
 }
 
-void UBaseHeroAbility::Cancel_Implementation()
+void UBaseHeroAbility::CallEndAbility()
+{
+	if (!IsAbilityLocked()) EndAbility();
+}
+
+void UBaseHeroAbility::CancelAbility_Implementation()
 {
 	
 }
 
-// Add a helper method to get the owning hero character
+void UBaseHeroAbility::CallCancelAbility()
+{
+	CancelAbility();
+}
+
 ABaseHeroCharacter* UBaseHeroAbility::GetOwningHeroCharacter() const
 {
 	return Cast<ABaseHeroCharacter>(GetOwner());
+}
+
+bool UBaseHeroAbility::IsAbilityLocked() const
+{
+	//TODO: add other condition to see if the ability is locked
+	return bIsOnCooldown;
 }
 
 FString UBaseHeroAbility::GetAmmoRatio() const
@@ -57,7 +116,7 @@ FString UBaseHeroAbility::GetAmmoRatio() const
 			   FString::FromInt(OwningHero->AmmoPools[AmmoPoolIndex].MaxAmmo);
 	}
 	
-	return "0/0";
+	return "";
 }
 
 float UBaseHeroAbility::GetAmmoPercent() const
@@ -123,4 +182,34 @@ void UBaseHeroAbility::ReloadAmmo()
 		FAmmoPool& AmmoPool = OwningHero->AmmoPools[AmmoPoolIndex];
 		AmmoPool.Ammo = AmmoPool.MaxAmmo;
 	}
+}
+
+bool UBaseHeroAbility::IsOnCooldown() const
+{
+	return bIsOnCooldown;
+}
+
+float UBaseHeroAbility::GetRemainingCooldown() const
+{
+	return RemainingCooldown;
+}
+
+float UBaseHeroAbility::GetCooldownPercent() const
+{
+	if (Cooldown <= 0.0f)
+	{
+		return 0.0f;
+	}
+	
+	return FMath::Clamp(RemainingCooldown / Cooldown, 0.0f, 1.0f);
+}
+
+float UBaseHeroAbility::GetCooldownScale() const
+{
+	return CooldownScale;
+}
+
+void UBaseHeroAbility::SetCooldownScale(float NewScale)
+{
+	CooldownScale = NewScale;
 }

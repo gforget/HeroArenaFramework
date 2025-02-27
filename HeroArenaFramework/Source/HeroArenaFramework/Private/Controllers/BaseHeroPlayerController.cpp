@@ -18,7 +18,7 @@ void ABaseHeroPlayerController::GameOver(TSubclassOf<UUserWidget> EndScreenClass
 {
 	GameHasEnded(GetPawn());
 	
-	PlayerHUD->RemoveFromParent();
+	CharacterHUD->RemoveFromParent();
 	GameModeHUD->RemoveFromParent();
 
 	UUserWidget* EndScreenWidget = CreateWidget(this, EndScreenClass);

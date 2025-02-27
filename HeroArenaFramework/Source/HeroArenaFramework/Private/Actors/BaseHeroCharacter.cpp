@@ -76,6 +76,7 @@ void ABaseHeroCharacter::BeginPlay()
 	
 	Health = MaxHealth;
 
+	//Visual stimuli
 	VSShooterCharacter = GetWorld()->SpawnActor<AVisualStimuli_ShooterCharacter>(
 		VisualStimuli_ShooterCharacterClass,
 		FVector::ZeroVector,
@@ -84,9 +85,11 @@ void ABaseHeroCharacter::BeginPlay()
 
 	VSShooterCharacter->SetShooterCharacterRef(this);
 	VSShooterCharacter->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform, NAME_None);
-	
+
+	//Navmesh Utility
 	NavMeshUtility = NewObject<UNavMeshUtility>(GetTransientPackage(), UNavMeshUtility::StaticClass());
 
+	//RotationViewPointRef 
 	RotationViewPointRef = GetWorld()->SpawnActor<ARotationViewPointRef>(
 		RotationViewPointRefClass,
 		FVector::ZeroVector,
@@ -100,7 +103,7 @@ void ABaseHeroCharacter::BeginPlay()
 	HeadCollision->SetSphereRadius(HeadshotRadius - 5.0f);
 	UpdateHeadCollision();
 
-	// Instantiate ability profiles (AllProfiles)
+	// Create All Ability Profiles
 	TArray<TMap<EAbilityEnum, TSubclassOf<UBaseHeroAbility>>> AbilityProfiles;
 	AbilityProfiles.Add(AbilityProfile1);
 	AbilityProfiles.Add(AbilityProfile2);
@@ -108,7 +111,7 @@ void ABaseHeroCharacter::BeginPlay()
 	AbilityProfiles.Add(AbilityProfile4);
 	AbilityProfiles.Add(AbilityProfile5);
 
-	AllAbilityProfiles.Empty(); // make sure our array is empty before instantiating
+	AllAbilityProfiles.Empty();
 
 	for (const TMap<EAbilityEnum, TSubclassOf<UBaseHeroAbility>>& Profile : AbilityProfiles)
 	{
@@ -117,7 +120,7 @@ void ABaseHeroCharacter::BeginPlay()
 		{
 			if (AbilityPair.Value)
 			{
-				// Instantiate the ability with this character as its outer
+				
 				UBaseHeroAbility* AbilityObject = NewObject<UBaseHeroAbility>(this, AbilityPair.Value);
 				if (AbilityObject)
 				{
@@ -141,7 +144,6 @@ void ABaseHeroCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	// Update collision sphere position every frame
 	UpdateHeadCollision();
 	
 	if (bShowHeadshotDebug)
@@ -169,21 +171,19 @@ void ABaseHeroCharacter::Tick(float DeltaTime)
 void ABaseHeroCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	// Get the Player Controller and then the Local Player subsystem for Enhanced Input.
+	
 	if (APlayerController* PC = Cast<APlayerController>(Controller))
 	{
 		if (ULocalPlayer* LocalPlayer = PC->GetLocalPlayer())
 		{
 			if (UEnhancedInputLocalPlayerSubsystem* Subsystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 			{
-				// Add the mapping context, at priority 0.
 				Subsystem->AddMappingContext(DefaultMappingContext, 0);
 			}
 		}
 	}
 
-	// Bind input function to their action counterpart
+	// Bind input function
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		if (MoveAction != nullptr) EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABaseHeroCharacter::MoveInput);
@@ -268,6 +268,16 @@ float ABaseHeroCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 
 UBaseHeroAbility* ABaseHeroCharacter::GetHeroAbility(int ProfileIndex, EAbilityEnum AbilityEnum)
 {
+	if ( ProfileIndex >= AllAbilityProfiles.Num())
+	{
+		return nullptr;	
+	}
+	
+	if (!AllAbilityProfiles[ProfileIndex].Contains(AbilityEnum))
+	{
+		return nullptr;
+	}
+
 	return AllAbilityProfiles[ProfileIndex][AbilityEnum];
 }
 
@@ -374,7 +384,7 @@ void ABaseHeroCharacter::TriggerAbilityPress(EAbilityEnum AbilityKey, const FInp
 		UBaseHeroAbility* Ability = AllAbilityProfiles[CurrentAbilityProfileIndex].FindRef(AbilityKey);
 		if (Ability)
 		{
-			Ability->StartAbility();
+			Ability->CallStartAbility();
 		}
 	}
 }
@@ -391,11 +401,11 @@ void ABaseHeroCharacter::TriggerAbilityHold(EAbilityEnum AbilityKey, const FInpu
 			bool bPressed = Value.Get<bool>();
 			if (bPressed)
 			{
-				Ability->StartAbility();
+				Ability->CallStartAbility();
 			}
 			else
 			{
-				Ability->EndAbility();
+				Ability->CallEndAbility();
 			}
 		}
 	}

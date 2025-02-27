@@ -26,14 +26,12 @@ public :
 	void AddOHHealthBar(ABaseHeroCharacter* AssignedCharacter);
 	
 protected:
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<UPlayerHUD> HUDScreenClass;
 	
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> OHHealthBarClass;
 
 	UPROPERTY()
-	UPlayerHUD* PlayerHUD;
+	UPlayerHUD* CharacterHUD;
 	
 	UPROPERTY()
 	UGameModeHUD* GameModeHUD;
