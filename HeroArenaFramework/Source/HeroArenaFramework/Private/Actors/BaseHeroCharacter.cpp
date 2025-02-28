@@ -120,7 +120,6 @@ void ABaseHeroCharacter::BeginPlay()
 		{
 			if (AbilityPair.Value)
 			{
-				
 				UBaseHeroAbility* AbilityObject = NewObject<UBaseHeroAbility>(this, AbilityPair.Value);
 				if (AbilityObject)
 				{
@@ -268,7 +267,7 @@ float ABaseHeroCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 
 UBaseHeroAbility* ABaseHeroCharacter::GetHeroAbility(int ProfileIndex, EAbilityEnum AbilityEnum)
 {
-	if ( ProfileIndex >= AllAbilityProfiles.Num())
+	if (ProfileIndex >= AllAbilityProfiles.Num())
 	{
 		return nullptr;	
 	}

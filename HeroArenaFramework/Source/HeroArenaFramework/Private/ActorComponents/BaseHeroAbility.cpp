@@ -37,6 +37,9 @@ void UBaseHeroAbility::ActivateCooldown()
 			CooldownTimerRate,
 			true
 		);
+		
+		// Broadcast the cooldown activated event
+		OnCooldownActivated.Broadcast();
 	}
 }
 
@@ -58,6 +61,9 @@ void UBaseHeroAbility::ClearCoolDown()
 	bIsOnCooldown = false;
 	RemainingCooldown = 0.0f;
 	GetWorld()->GetTimerManager().ClearTimer(CooldownTimerHandle);
+	
+	// Broadcast the cooldown cleared event
+	OnCooldownCleared.Broadcast();
 }
 
 void UBaseHeroAbility::TickComponent(float DeltaTime, ELevelTick TickType,

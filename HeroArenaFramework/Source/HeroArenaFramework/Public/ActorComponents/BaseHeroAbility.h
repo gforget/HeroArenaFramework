@@ -8,6 +8,10 @@
 
 class ABaseHeroCharacter;
 
+// Add this before the class declaration
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCooldownActivatedDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCooldownClearedDelegate);
+
 UCLASS(ClassGroup=(Custom), BlueprintType, Blueprintable, meta=(BlueprintSpawnableComponent))
 class HEROARENAFRAMEWORK_API UBaseHeroAbility : public UActorComponent
 {
@@ -67,6 +71,14 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Cooldown")
 	void ClearCoolDown();
+	
+	// Add this new event
+	UPROPERTY(BlueprintAssignable, Category="Cooldown")
+	FOnCooldownActivatedDelegate OnCooldownActivated;
+	
+	// Add this new event for cooldown cleared
+	UPROPERTY(BlueprintAssignable, Category="Cooldown")
+	FOnCooldownClearedDelegate OnCooldownCleared;
 	
 protected:
 	

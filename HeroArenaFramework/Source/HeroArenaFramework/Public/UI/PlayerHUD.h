@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "PlayerHUD.generated.h"
 
+class UAbilityHUD;
 /**
  * 
  */
@@ -15,6 +16,7 @@ class HEROARENAFRAMEWORK_API UPlayerHUD : public UUserWidget
 	GENERATED_BODY()
 	
 public:
+	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Main Events")
 	void OnSpectatorModeEvent();
 

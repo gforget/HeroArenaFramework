@@ -2,6 +2,7 @@
 
 
 #include "UI/PlayerHUD.h"
+#include "UI/AbilityHUD.h"
 
 void UPlayerHUD::OnSpectatorModeEvent_Implementation()
 {

@@ -8,7 +8,6 @@
 #include "Blueprint/UserWidget.h"
 #include "GameMode/Multiplayer/ShooterGameMode/MP_BaseGameState.h"
 #include "UI/GameModeHUD.h"
-#include "UI/Multiplayer/MP_OHHealthBar.h"
 #include "UI/PlayerHUD.h"
 
 AMP_HeroPlayerController::AMP_HeroPlayerController()
@@ -80,7 +79,7 @@ void AMP_HeroPlayerController::InstantiateHUD(APawn* InPawn)
 					CharacterHUD->OnSpectatorModeEvent();
 				}
 			}
-
+			
 			if (GameModeHUD == nullptr)
 			{
 				if (AMP_BaseGameState* ShooterGameState = Cast<AMP_BaseGameState>(GetWorld()->GetGameState()))
