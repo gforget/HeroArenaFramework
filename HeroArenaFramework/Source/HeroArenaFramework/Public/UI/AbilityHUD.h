@@ -17,6 +17,9 @@ class HEROARENAFRAMEWORK_API UAbilityHUD : public UUserWidget
 	
 public:
 	virtual void NativeConstruct() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Ability")
+	UTexture2D* AbilityLockedIconBrush;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Ability")
 	UTexture2D* AbilityIconBrush;

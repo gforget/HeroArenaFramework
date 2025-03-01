@@ -35,6 +35,11 @@ public:
 	void CancelAbility();
 	virtual void CancelAbility_Implementation();
 	void CallCancelAbility();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	bool IsAbilityLocked() const;
+	virtual bool IsAbilityLocked_Implementation() const;
+	bool CallIsAbilityLocked() const;
 	
 	UFUNCTION(BlueprintCallable, Category="Ammo")
 	FString GetAmmoRatio() const;
@@ -102,7 +107,7 @@ protected:
 
 	UPROPERTY()
 	bool bIsOnCooldown = false;
-
+	
 	UPROPERTY()
 	float RemainingCooldown = 0.0f;
 
@@ -114,9 +119,9 @@ protected:
 	float CooldownTimerRate = 0.1f;
 	
 	ABaseHeroCharacter* GetOwningHeroCharacter() const;
-
-	bool IsAbilityLocked() const;
-
+	
+	bool CanUseAbility() const;
+	
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

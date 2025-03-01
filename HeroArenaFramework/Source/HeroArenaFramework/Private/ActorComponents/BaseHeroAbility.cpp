@@ -79,7 +79,7 @@ void UBaseHeroAbility::StartAbility_Implementation()
 
 void UBaseHeroAbility::CallStartAbility()
 {
-	if (!IsAbilityLocked()) StartAbility();
+	if (!CanUseAbility()) StartAbility();
 }
 
 void UBaseHeroAbility::EndAbility_Implementation()
@@ -89,7 +89,7 @@ void UBaseHeroAbility::EndAbility_Implementation()
 
 void UBaseHeroAbility::CallEndAbility()
 {
-	if (!IsAbilityLocked()) EndAbility();
+	if (!CanUseAbility()) EndAbility();
 }
 
 void UBaseHeroAbility::CancelAbility_Implementation()
@@ -102,15 +102,25 @@ void UBaseHeroAbility::CallCancelAbility()
 	CancelAbility();
 }
 
+bool UBaseHeroAbility::IsAbilityLocked_Implementation() const
+{
+	return false;
+}
+
+bool UBaseHeroAbility::CallIsAbilityLocked() const
+{
+	return IsAbilityLocked();
+}
+
+
 ABaseHeroCharacter* UBaseHeroAbility::GetOwningHeroCharacter() const
 {
 	return Cast<ABaseHeroCharacter>(GetOwner());
 }
 
-bool UBaseHeroAbility::IsAbilityLocked() const
+bool UBaseHeroAbility::CanUseAbility() const
 {
-	//TODO: add other condition to see if the ability is locked
-	return bIsOnCooldown;
+	return bIsOnCooldown && !CallIsAbilityLocked();
 }
 
 FString UBaseHeroAbility::GetAmmoRatio() const
